@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/bd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bd?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: user_spring
       SPRING_DATASOURCE_PASSWORD: spring_password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
@@ -31,17 +31,17 @@ services:
     depends_on:
       - db
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    ports:
-      - "8081:80"
-    depends_on:
-      - backend
-    networks:
-      - app-network
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: frontend
+  #   ports:
+  #     - "8081:80"
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - app-network
 
 volumes:
   db_data:
