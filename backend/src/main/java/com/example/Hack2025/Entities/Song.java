@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "songs")
-public class Songs {
+public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,10 +20,10 @@ public class Songs {
     @Column(nullable = false)
     private String artist;
 
-    public Songs() {
+    public Song() {
     }
 
-    public Songs(Integer id, String title, String artist) {
+    public Song(Integer id, String title, String artist) {
         this.id = id;
         this.title = title;
         this.artist = artist;

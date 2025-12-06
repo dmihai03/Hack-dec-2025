@@ -1,5 +1,6 @@
 package com.example.Hack2025.Entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -7,6 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,14 +34,29 @@ public class User {
 
     private Integer ratingNumber;
 
-    @Column(columnDefinition = "json")
-    private List<String> awardArray;
+    @ManyToMany
+    @JoinTable(
+        name = "users_awards", // tabel intermediar
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "award_id")
+    )
+    private List<Award> awards;
 
-    @Column(columnDefinition = "json")
-    private List<String> groups;
+    @ManyToMany
+    @JoinTable(
+        name = "users_groups",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private List<Group> groups;
 
-    @Column(columnDefinition = "json")
-    private List<String> songs;
+    @ManyToMany
+    @JoinTable(
+        name = "users_songs",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
+    private List<Song> songs;
     
     public User() {
     }
@@ -47,9 +66,9 @@ public class User {
         this.username = username;
         this.email = email;
         this.ratingNumber = 0;
-        this.awardArray = List.of();
-        this.groups = List.of();
-        this.songs = List.of();
+        this.awards = new ArrayList<>();
+        this.groups = new ArrayList<>();
+        this.songs = new ArrayList<>();
     }
     
     public Integer getId() {
@@ -92,27 +111,27 @@ public class User {
         this.ratingNumber = ratingNumber;
     }
 
-    public List<String> getAwardArray () {
-        return awardArray;
+    public List<Award> getAwards () {
+        return awards;
     }
 
-    public void setAwardArray (List<String> awardArray) {
-        this.awardArray = awardArray;
+    public void setAwards (List<Award> awards) {
+        this.awards = awards;
     }
 
-    public List<String> getGroups () {
+    public List<Group> getGroups () {
         return groups;
     }
 
-    public void setGroups (List<String> groups) {
+    public void setGroups (List<Group> groups) {
         this.groups = groups;
     }
 
-    public List<String> getSongs () {
+    public List<Song> getSongs () {
         return songs;
     }
 
-    public void setSongs (List<String> songs) {
+    public void setSongs (List<Song> songs) {
         this.songs = songs;
     }
 }

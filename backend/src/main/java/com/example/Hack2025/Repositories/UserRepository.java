@@ -5,7 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import com.example.Hack2025.Entities.Group;
-import com.example.Hack2025.Entities.Songs;
+import com.example.Hack2025.Entities.Song;
 import com.example.Hack2025.Entities.User;
 import com.example.Hack2025.Entities.Award;
 
@@ -54,7 +54,7 @@ public class UserRepository {
         return entityManager.createQuery(query, User.class).getResultList();
     }
 
-    public List<String> getUserGroups(Integer userId) {
+    public List<Group> getUserGroups(Integer userId) {
         User user = entityManager.find(User.class, userId);
         if (user != null) {
             return user.getGroups();
@@ -62,29 +62,21 @@ public class UserRepository {
         return List.of();
     }
 
-    public List<Group> getGroupsObjForUser(Integer userId) {
+    public void addGroupToUser(Integer userId, Integer groupId) {
         User user = entityManager.find(User.class, userId);
         if (user != null) {
-            List<String> groupIds = user.getGroups();
-            String query = "SELECT g FROM Group g WHERE g.id IN :groupIds";
-            return entityManager.createQuery(query, Group.class)
-                    .setParameter("groupIds", groupIds)
-                    .getResultList();
-        }
-        return List.of();
-    }
+            List<Group> groups = user.getGroups();
+            if (groups.stream().anyMatch(g -> g.getId().equals(groupId))) {
+                return; // Group already added
+            }
 
-    public void addSongToUser(Integer userId, Integer songId) {
-        User user = entityManager.find(User.class, userId);
-        if (user != null) {
-            List<String> songs = user.getSongs();
-            songs.add(songId.toString());
-            user.setSongs(songs);
+            groups.add(entityManager.find(Group.class, groupId));
+            user.setGroups(groups);
             entityManager.merge(user);
         }
     }
 
-    public List<String> getUsersSongs(Integer userId) {
+    public List<Song> getUsersSongs(Integer userId) {
         User user = entityManager.find(User.class, userId);
         if (user != null) {
             return user.getSongs();
@@ -92,45 +84,31 @@ public class UserRepository {
         return List.of();
     }
 
-    public List<Songs> getSongsObjForUser(Integer userId) {
+    public void addSongToUser(Integer userId, Integer songId) {
         User user = entityManager.find(User.class, userId);
         if (user != null) {
-            List<String> songIds = user.getSongs();
-            String query = "SELECT s FROM Songs s WHERE s.id IN :songIds";
-            return entityManager.createQuery(query, Songs.class)
-                    .setParameter("songIds", songIds)
-                    .getResultList();
-        }
-        return List.of();
-    }
-
-    public void addAwardToUser(Integer userId, String awardId) {
-        User user = entityManager.find(User.class, userId);
-        if (user != null) {
-            List<String> awards = user.getAwardArray();
-            awards.add(awardId);
-            user.setAwardArray(awards);
+            List<Song> songs = user.getSongs();
+            songs.add(entityManager.find(Song.class, songId));
+            user.setSongs(songs);
             entityManager.merge(user);
         }
     }
 
-    public List<String> getUserAwards(Integer userId) {
+    public List<Award> getUserAwards(Integer userId) {
         User user = entityManager.find(User.class, userId);
         if (user != null) {
-            return user.getAwardArray();
+            return user.getAwards();
         }
         return List.of();
     }
 
-    public List<Award> getAwardsObjForUser(Integer userId) {
+    public void addAwardToUser(Integer userId, Integer awardId) {
         User user = entityManager.find(User.class, userId);
         if (user != null) {
-            List<String> awardIds = user.getAwardArray();
-            String query = "SELECT a FROM Award a WHERE a.id IN :awardIds";
-            return entityManager.createQuery(query, Award.class)
-                    .setParameter("awardIds", awardIds)
-                    .getResultList();
+            List<Award> awards = user.getAwards();
+            awards.add(entityManager.find(Award.class, awardId));
+            user.setAwards(awards);
+            entityManager.merge(user);
         }
-        return List.of();
     }
 }
