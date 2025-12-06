@@ -21,7 +21,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepo;
 
-    @GetMapping("profile/{userID}")
+    @GetMapping("/{userID}/profile")
     public ResponseEntity<User> getUserProfile(@PathVariable Integer userID) {
         return userRepo.getUserById(userID)
                 .map(ResponseEntity::ok)

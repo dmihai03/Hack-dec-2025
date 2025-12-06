@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.example.Hack2025.Entities.Song;
@@ -57,6 +58,19 @@ public class SongRepository {
         Song song = entityManager.find(Song.class, songId);
         if (song != null) {
             entityManager.remove(song);
+        }
+    }
+
+    public Object getSongsByFilter(String filter, String value) {
+        switch (filter.toLowerCase()) {
+            case "title":
+                return getSongByTitle(value);
+            case "artist":
+                return getSongsByArtist(value);
+            case "category":
+                return getSongsByCategory(value);
+            default:
+                return ResponseEntity.badRequest().body("Invalid filter: " + filter);
         }
     }
 }

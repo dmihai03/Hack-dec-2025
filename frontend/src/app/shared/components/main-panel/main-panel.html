@@ -14,9 +14,9 @@
 
     <div class="filters">
       <button
-        [class.active]="activeFilter === 'song'"
-        (click)="setFilter('song')">
-        Song
+        [class.active]="activeFilter === 'title'"
+        (click)="setFilter('title')">
+        Title
       </button>
       <button
         [class.active]="activeFilter === 'artist'"
@@ -24,10 +24,27 @@
         Artist
       </button>
       <button
-        [class.active]="activeFilter === 'genre'"
-        (click)="setFilter('genre')">
-        Genre
+        [class.active]="activeFilter === 'category'"
+        (click)="setFilter('category')">
+        Category
       </button>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <div class="search-results" *ngIf="hasSearched">
+      <h3>🔎 Search Results</h3>
+      <div *ngIf="isLoading" class="loading">Loading...</div>
+      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+      <ul class="results-list" *ngIf="!isLoading && !errorMessage && searchResults.length > 0">
+        <li *ngFor="let song of searchResults">
+          <div class="song-info">
+            <span class="title">{{ song.title }}</span>
+            <span class="artist"> – {{ song.artist }}</span>
+          </div>
+          <span class="category">{{ song.category }}</span>
+        </li>
+      </ul>
+      <p *ngIf="!isLoading && !errorMessage && searchResults.length === 0">No songs available.</p>
     </div>
 
   </section>
