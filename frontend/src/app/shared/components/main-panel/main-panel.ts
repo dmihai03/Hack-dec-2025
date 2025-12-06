@@ -41,6 +41,7 @@ export class MainPanelComponent {
     { title: 'Imagine', artist: 'John Lennon', likes: 98 },
     { title: "Sweet Child O' Mine", artist: "Guns N' Roses", likes: 87 }
   ];
+  router: any;
 
   setFilter(filter: 'title' | 'artist' | 'category') {
     this.activeFilter = filter;
