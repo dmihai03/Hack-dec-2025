@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameStateService, Avatar } from '../../core/services/game-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -16,7 +17,11 @@ export class GameModeComponent implements OnInit {
   coins = 0;
   selectedAvatar: Avatar | null = null;
 
-  constructor(private gameState: GameStateService) {}
+  constructor(
+  private gameState: GameStateService,
+  private router: Router
+) {}
+
 
   ngOnInit(): void {
     this.avatars = this.gameState.avatars;
@@ -53,11 +58,13 @@ export class GameModeComponent implements OnInit {
   // pentru mai târziu – aici o să ducem userul în arena
   startSinglePlayer() {
     console.log('Start single player with avatar:', this.selectedAvatar);
-    // TODO: router.navigate(['/game/arena', 'single']);
+    this.gameState.setGameMode('single'); // dacă ai metoda
+    this.router.navigate(['/arena']);
   }
 
   startMultiPlayer() {
     console.log('Start multiplayer with avatar:', this.selectedAvatar);
-    // TODO: router.navigate(['/game/arena', 'multi']);
+    this.gameState.setGameMode('multi');
+    this.router.navigate(['/arena']);
   }
 }

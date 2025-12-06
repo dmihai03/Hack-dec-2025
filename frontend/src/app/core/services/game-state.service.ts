@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+export type GameModeType = 'single' | 'multi';
+
 export interface Avatar {
   id: string;
   name: string;
@@ -56,4 +58,10 @@ export class GameStateService {
   setSelectedAvatar(avatar: Avatar) {
     this._selectedAvatar = avatar;
   }
+  gameMode: GameModeType | null = null;
+
+  setGameMode(mode: GameModeType) {
+    this.gameMode = mode;
+  }
 }
+
