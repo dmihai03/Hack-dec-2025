@@ -8,6 +8,7 @@
   <!-- USER -->
   <div class="user-header" *ngIf="user">
     <span class="username">@{{ user.username }}</span>
+    <span class="display-name">{{ user.name }}</span>
     <span class="rating">⭐ rating: {{ user.ratingNumber }}</span>
   </div>
 
@@ -15,7 +16,7 @@
 
   <!-- RECENT SONGS -->
   <div class="section" *ngIf="!isLoading">
-    <h3>🎵 Piese recente</h3>
+    <h3>🎵 Recent songs</h3>
     <ul *ngIf="recentSongs.length > 0">
       <li *ngFor="let song of recentSongs">
         {{ song.title }} – {{ song.artist }}
@@ -33,7 +34,7 @@
     <ul *ngIf="badges.length > 0">
       <li *ngFor="let badge of badges">
         <strong>{{ badge.name }}</strong>
-        <span class="badge-desc"> – {{ badge.description }}</span>
+        <span class="badge-desc">– {{ badge.description }}</span>
       </li>
     </ul>
     <p *ngIf="badges.length === 0">No badges yet.</p>
