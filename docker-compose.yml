@@ -24,24 +24,24 @@ services:
       SPRING_DATASOURCE_USERNAME: user_spring
       SPRING_DATASOURCE_PASSWORD: spring_password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    networks:
-      - app-network
     ports:
       - "8080:8080"
     depends_on:
       - db
+    networks:
+      - app-network
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: frontend
-  #   ports:
-  #     - "8081:80"
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - app-network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 volumes:
   db_data:
