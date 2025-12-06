@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -24,12 +26,21 @@ public class Group {
     @ManyToMany(mappedBy = "groups")
     private List<User> members;
 
+    @ManyToMany
+    @JoinTable(
+        name = "groups_shared_songs",
+        joinColumns = @JoinColumn(name = "group_id"),
+        inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
+    private List<Song> sharedSongs;
+
     public Group() {
     }
 
     public Group(String name) {
         this.name = name;
         this.members = new ArrayList<>();
+        this.sharedSongs = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -42,5 +53,21 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
+
+    public List<Song> getSharedSongs() {
+        return sharedSongs;
+    }
+
+    public void setSharedSongs(List<Song> sharedSongs) {
+        this.sharedSongs = sharedSongs;
     }
 }

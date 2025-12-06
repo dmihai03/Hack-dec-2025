@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import com.example.Hack2025.Entities.Group;
 import com.example.Hack2025.Entities.Song;
 
 import java.util.List;
@@ -72,5 +73,37 @@ public class SongRepository {
             default:
                 return ResponseEntity.badRequest().body("Invalid filter: " + filter);
         }
+    }
+
+    public void addSongToGroup(Integer groupId, Integer songId) {
+        Group group = entityManager.find(Group.class, groupId);
+        Song song = entityManager.find(Song.class, songId);
+        if (group != null && song != null) {
+            List<Song> sharedSongs = group.getSharedSongs();
+            if (!sharedSongs.contains(song)) {
+                sharedSongs.add(song);
+                group.setSharedSongs(sharedSongs);
+                entityManager.merge(group);
+            }
+        }
+    }
+
+    public void removeSongFromGroup(Integer groupId, Integer songId) {
+        Group group = entityManager.find(Group.class, groupId);
+        Song song = entityManager.find(Song.class, songId);
+        if (group != null && song != null) {
+            List<Song> sharedSongs = group.getSharedSongs();
+            sharedSongs.remove(song);
+            group.setSharedSongs(sharedSongs);
+            entityManager.merge(group);
+        }
+    }
+
+    public List<Song> getGroupSharedSongs(Integer groupId) {
+        Group group = entityManager.find(Group.class, groupId);
+        if (group != null) {
+            return group.getSharedSongs();
+        }
+        return List.of();
     }
 }

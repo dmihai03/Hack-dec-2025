@@ -23,6 +23,9 @@ public class Song {
     @Column(nullable = false)
     private String category;
  
+    @Column(nullable = true)
+    private Integer likes;
+
     public Song() {
     }
 
