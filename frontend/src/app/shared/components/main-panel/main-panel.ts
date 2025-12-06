@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // ✅ ADD
+import { Router } from '@angular/router';
 
 interface TrendingSong {
   title: string;
@@ -36,8 +37,10 @@ export class MainPanelComponent {
     // TODO: backend request
   }
 
+  constructor(private router: Router) {}
   enterGameMode() {
     console.log('ENTER GAME MODE');
+    this.router.navigate(['/game']);
     // TODO: route to /game
   }
 }
