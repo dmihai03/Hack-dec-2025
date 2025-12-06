@@ -2,6 +2,7 @@ import { Component, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 export interface Song {
   id: number;
@@ -41,7 +42,6 @@ export class MainPanelComponent {
     { title: 'Imagine', artist: 'John Lennon', likes: 98 },
     { title: "Sweet Child O' Mine", artist: "Guns N' Roses", likes: 87 }
   ];
-  router: any;
 
   setFilter(filter: 'title' | 'artist' | 'category') {
     this.activeFilter = filter;
@@ -80,9 +80,9 @@ export class MainPanelComponent {
     });
   }
 
+  constructor(private router: Router) {}
   enterGameMode() {
     console.log('ENTER GAME MODE');
     this.router.navigate(['/game']);
-    // TODO: route to /game
   }
 }
