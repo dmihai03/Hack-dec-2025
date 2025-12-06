@@ -1,1 +1,81 @@
-<p>game-mode works!</p>
+<div class="game-page">
+
+  <!-- TITLU -->
+  <header class="game-header">
+    <span class="icon">🎮</span>
+    <h1>Game Mode</h1>
+  </header>
+
+  <!-- INFO SUS: avatar + coins -->
+  <section class="game-info">
+    <div class="avatar-info" (click)="openAvatarModal()">
+      <div class="avatar-circle">
+        <img *ngIf="selectedAvatar"
+             [src]="selectedAvatar.imageUrl"
+             [alt]="selectedAvatar.name">
+      </div>
+      <div class="avatar-text">
+        <div class="label">Current avatar</div>
+        <div class="name">
+          {{ selectedAvatar?.name || 'Unknown Artist' }}
+        </div>
+        <div class="hint">(click to change)</div>
+      </div>
+    </div>
+
+    <div class="coins-info">
+      <span class="coins-label">Coins</span>
+      <span class="coins-value">🪙 {{ coins }}</span>
+    </div>
+  </section>
+
+  <!-- MODURI DE JOC (apar doar după ce a ales avatar) -->
+  <section class="modes-section" *ngIf="selectedAvatar">
+    <h2>Choose your mode</h2>
+
+    <div class="modes-buttons">
+      <button class="mode-btn" (click)="startSinglePlayer()">
+        Single Player
+      </button>
+
+      <button class="mode-btn secondary" (click)="startMultiPlayer()">
+        Multiplayer
+      </button>
+    </div>
+  </section>
+
+  <!-- POPUP CHOOSE AVATAR -->
+  <div class="modal-backdrop" *ngIf="showAvatarModal">
+    <div class="modal">
+      <h2>Choose your Avatar</h2>
+      <p class="modal-subtitle">
+        Unlock famous artists with coins. You always have a default avatar.
+      </p>
+
+      <div class="avatars-grid">
+        <button
+          *ngFor="let avatar of avatars"
+          class="avatar-card"
+          [class.locked]="!canUseAvatar(avatar)"
+          (click)="selectAvatar(avatar)"
+        >
+          <div class="avatar-img">
+            <img [src]="avatar.imageUrl" [alt]="avatar.name">
+          </div>
+          <div class="avatar-name">{{ avatar.name }}</div>
+          <div class="avatar-cost">
+            <span *ngIf="avatar.requiredCoins === 0">Default</span>
+            <span *ngIf="avatar.requiredCoins > 0">
+              🪙 {{ avatar.requiredCoins }} coins
+            </span>
+          </div>
+        </button>
+      </div>
+
+      <p class="coins-info-modal">
+        Your coins: <strong>🪙 {{ coins }}</strong>
+      </p>
+    </div>
+  </div>
+
+</div>

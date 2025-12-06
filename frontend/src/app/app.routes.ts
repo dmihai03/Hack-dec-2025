@@ -4,5 +4,5 @@ import { GameModeComponent } from './pages/game-mode/game-mode';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'game', component: GameModeComponent }, // ✅ ADD
+  { path: 'game', component: GameModeComponent },
 ];
