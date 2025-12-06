@@ -17,7 +17,7 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
     
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(Integer id) {
         User user = entityManager.find(User.class, id);
         return Optional.ofNullable(user);
     }
