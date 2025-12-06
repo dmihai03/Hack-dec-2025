@@ -1,9 +1,11 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { User } from '../../../core/models/user';
 import { Song } from '../../../core/models/song';
 import { Badge } from '../../../core/models/badge';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface GroupMember {
   id: number;
@@ -28,10 +30,14 @@ interface Group {
 export class UserPanelComponent implements OnInit {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
+  private authService = inject(AuthService);
   private apiUrl = '/api';
 
-  // Current user ID (in a real app, this would come from auth service)
-  userId = 1;
+  // Get user ID from auth service
+  get userId(): number | null {
+    return this.authService.userId;
+  }
 
   user: User | null = null;
   recentSongs: Song[] = [];
@@ -47,7 +53,9 @@ export class UserPanelComponent implements OnInit {
   isLoadingGroup = false;
 
   ngOnInit() {
-    this.loadUserData();
+    if (this.userId) {
+      this.loadUserData();
+    }
   }
 
   loadUserData() {
@@ -125,5 +133,10 @@ export class UserPanelComponent implements OnInit {
 
   closeGroupPopup() {
     this.selectedGroup = null;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

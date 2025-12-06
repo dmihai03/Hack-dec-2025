@@ -27,10 +27,18 @@ public class UserRepository {
 
     public Optional<User> getUserByUsername(String username) {
         String query = "SELECT u FROM User u WHERE u.username = :username";
-        User user = entityManager.createQuery(query, User.class)
+        List<User> results = entityManager.createQuery(query, User.class)
                 .setParameter("username", username)
-                .getSingleResult();
-        return Optional.ofNullable(user);
+                .getResultList();
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        String query = "SELECT u FROM User u WHERE u.email = :email";
+        List<User> results = entityManager.createQuery(query, User.class)
+                .setParameter("email", email)
+                .getResultList();
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     public void updateUserUsername(Integer userId, String newUsername) {

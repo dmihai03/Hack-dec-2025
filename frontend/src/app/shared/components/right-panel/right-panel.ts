@@ -2,6 +2,7 @@ import { Component, OnInit, inject, ChangeDetectorRef, NgZone } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface ReceivedSong {
   from: string;
@@ -25,10 +26,13 @@ export class RightPanelComponent implements OnInit {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
   private zone = inject(NgZone);
+  private authService = inject(AuthService);
   private apiUrl = '/api';
 
-  // Current user ID (should come from auth service)
-  userId = 1;
+  // Get user ID from auth service
+  get userId(): number | null {
+    return this.authService.userId;
+  }
 
   // Form fields
   songName = '';
@@ -42,15 +46,24 @@ export class RightPanelComponent implements OnInit {
   isError = false;
   isSending = false;
 
-  // MOCK – vine din backend mai târziu
-  receivedSongs: ReceivedSong[] = [
-    { from: 'alex_rock', title: 'Numb', artist: 'Linkin Park' },
-    { from: 'maria_vibes', title: 'Summertime Sadness', artist: 'Lana Del Rey' },
-    { from: 'ionut', title: 'Bohemian Rhapsody', artist: 'Queen' }
-  ];
+  // Music box songs
+  receivedSongs: ReceivedSong[] = [];
 
   ngOnInit() {
-    this.loadUserGroups();
+    if (this.userId) {
+      this.loadUserGroups();
+      this.loadMusicBox();
+    }
+  }
+
+  loadMusicBox() {
+    this.http.get<ReceivedSong[]>(`${this.apiUrl}/users/${this.userId}/musicbox`).subscribe({
+      next: (songs) => {
+        this.receivedSongs = songs;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Failed to load music box', err)
+    });
   }
 
   loadUserGroups() {

@@ -1,0 +1,119 @@
+<div class="login-container">
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
+  <div class="login-box">
+    <h1>🎵 Nostalgia</h1>
+    <h2 *ngIf="!isSignup">LOGIN</h2>
+    <h2 *ngIf="isSignup">SIGN UP</h2>
+
+    <!-- Error Message -->
+    <div class="message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    
+    <!-- Success Message -->
+    <div class="message success" *ngIf="successMessage">{{ successMessage }}</div>
+
+    <!-- LOGIN FORM -->
+    <form *ngIf="!isSignup" (ngSubmit)="login()">
+      <div class="input-group">
+        <label>Username</label>
+        <input 
+          type="text" 
+          [(ngModel)]="loginUsername" 
+          name="username"
+          placeholder="Enter your username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input 
+          type="password" 
+          [(ngModel)]="loginPassword" 
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="retro-btn" [disabled]="isLoading">
+        {{ isLoading ? 'LOADING...' : 'LOGIN' }}
+      </button>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form *ngIf="isSignup" (ngSubmit)="signup()">
+      <div class="input-group">
+        <label>Name</label>
+        <input 
+          type="text" 
+          [(ngModel)]="signupName" 
+          name="name"
+          placeholder="Your display name"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Username</label>
+        <input 
+          type="text" 
+          [(ngModel)]="signupUsername" 
+          name="username"
+          placeholder="Choose a username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input 
+          type="email" 
+          [(ngModel)]="signupEmail" 
+          name="email"
+          placeholder="your@email.com"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input 
+          type="password" 
+          [(ngModel)]="signupPassword" 
+          name="password"
+          placeholder="Choose a password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Confirm Password</label>
+        <input 
+          type="password" 
+          [(ngModel)]="signupConfirmPassword" 
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button type="submit" class="retro-btn" [disabled]="isLoading">
+        {{ isLoading ? 'LOADING...' : 'SIGN UP' }}
+      </button>
+    </form>
+
+    <!-- Toggle Link -->
+    <div class="toggle-link">
+      <span *ngIf="!isSignup">
+        Don't have an account? 
+        <a (click)="toggleMode()">Sign up</a>
+      </span>
+      <span *ngIf="isSignup">
+        Already have an account? 
+        <a (click)="toggleMode()">Login</a>
+      </span>
+    </div>
+  </div>
+</div>

@@ -53,6 +53,13 @@
     </li>
   </ul>
   <p *ngIf="showGroups && groups.length === 0">No groups yet.</p>
+
+  <div class="divider" *ngIf="!isLoading"></div>
+
+  <!-- LOGOUT -->
+  <button class="retro-btn logout-btn" (click)="logout()" *ngIf="!isLoading">
+    🚪 Logout
+  </button>
 </div>
 
 <!-- GROUP POPUP MODAL -->
