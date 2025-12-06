@@ -20,6 +20,9 @@ public class Song {
     @Column(nullable = false)
     private String artist;
 
+    @Column(nullable = false)
+    private String category;
+ 
     public Song() {
     }
 
@@ -41,11 +44,19 @@ public class Song {
         return artist;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

@@ -2,6 +2,8 @@ package com.example.Hack2025.Repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.Hack2025.Entities.Group;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
@@ -110,5 +113,20 @@ public class UserRepository {
             user.setAwards(awards);
             entityManager.merge(user);
         }
+    }
+
+    public void removeGroupFromUser(Integer userID, Integer groupID) {
+        User user = entityManager.find(User.class, userID);
+        if (user != null) {
+            List<Group> groups = user.getGroups();
+            groups.removeIf(g -> g.getId().equals(groupID));
+            user.setGroups(groups);
+            entityManager.merge(user);
+        }
+    }
+
+    public void removeSongFromUser(Integer userID, Integer songID) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeSongFromUser'");
     }
 }

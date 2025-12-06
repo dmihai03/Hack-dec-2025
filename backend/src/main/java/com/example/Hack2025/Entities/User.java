@@ -99,6 +99,10 @@ public class User {
         this.username = username;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    } 
+
     public void addRatingNumber () {
         this.ratingNumber += 1;
     }
