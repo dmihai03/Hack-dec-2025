@@ -1,0 +1,57 @@
+<div class="main-panel">
+
+  <!-- SEARCH -->
+  <section class="search-section">
+
+    <div class="search-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search songs, artists, genres..."
+      />
+      <button class="search-btn" (click)="search()">🔍</button>
+    </div>
+
+    <div class="filters">
+      <button
+        [class.active]="activeFilter === 'song'"
+        (click)="setFilter('song')">
+        Song
+      </button>
+      <button
+        [class.active]="activeFilter === 'artist'"
+        (click)="setFilter('artist')">
+        Artist
+      </button>
+      <button
+        [class.active]="activeFilter === 'genre'"
+        (click)="setFilter('genre')">
+        Genre
+      </button>
+    </div>
+
+  </section>
+
+  <!-- TRENDING -->
+  <section class="trending-section">
+    <h3>🔥 Trending songs</h3>
+
+    <ul class="trending-list">
+      <li *ngFor="let song of trendingSongs">
+        <div class="song-info">
+          <span class="title">{{ song.title }}</span>
+          <span class="artist">– {{ song.artist }}</span>
+        </div>
+        <div class="likes">❤️ {{ song.likes }}</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- GAME MODE -->
+  <div class="game-mode-wrapper">
+    <button class="game-mode-btn" (click)="enterGameMode()">
+      🎮 GAME MODE
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,81 @@
+.user-panel {
+  font-family: 'Press Start 2P', monospace;
+  color: #00fff7;
+  padding: 24px;
+  height: 100%;
+}
+
+.user-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.username {
+  font-size: 14px;
+  color: #00fff7;
+  text-shadow: 0 0 8px #00fff7;
+}
+
+.rating {
+  font-size: 10px;
+  color: #ffd700;
+}
+
+.section h3 {
+  margin-bottom: 10px;
+  font-size: 10px;
+  color: #ff4fd8;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section li {
+  font-size: 9px;
+  margin-bottom: 6px;
+}
+
+.likes {
+  color: #aaa;
+}
+
+.badge-desc {
+  color: #ccc;
+}
+
+.divider {
+  margin: 16px 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #00fff7, transparent);
+}
+
+.retro-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #000;
+  background: #ff4fd8;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 12px #ff4fd8;
+}
+
+.retro-btn:hover {
+  background: #ff79e1;
+}
+
+.groups {
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+}
+
+.groups li {
+  font-size: 9px;
+}

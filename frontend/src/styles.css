@@ -1,1 +1,73 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background: radial-gradient(circle at top, #2b0040, #0a0014);
+  color: #eaffff;
+  font-family: 'VT323', monospace;
+}
+
+h1, h2, h3 {
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 2px;
+  color: #00fff0;
+  text-shadow: 0 0 8px #00fff0;
+}
+
+button {
+  background: linear-gradient(90deg, #ff00cc, #3333ff);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-family: 'Press Start 2P';
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(255,0,204,0.6);
+}
+
+/* ===== STAR BACKGROUND ===== */
+
+.stars,
+.stars2,
+.stars3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background-repeat: repeat;
+  animation: moveStars 120s linear infinite;
+}
+
+/* Stele mici */
+.stars {
+  background-image: radial-gradient(1px 1px at 20px 30px, #cfd7ff, transparent),
+                    radial-gradient(1px 1px at 100px 80px, #e6e6e6, transparent),
+                    radial-gradient(1px 1px at 200px 150px, #bfcfff, transparent);
+  background-size: 300px 300px;
+}
+
+/* Stele medii */
+.stars2 {
+  background-image: radial-gradient(2px 2px at 50px 100px, #ffffff, transparent),
+                    radial-gradient(2px 2px at 150px 200px, #d0d8ff, transparent);
+  background-size: 400px 400px;
+  animation-duration: 180s;
+}
+
+/* Stele mari (foarte puține) */
+.stars3 {
+  background-image: radial-gradient(3px 3px at 250px 250px, #ffffffcc, transparent);
+  background-size: 600px 600px;
+  animation-duration: 240s;
+}
+
+@keyframes moveStars {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1000px);
+  }
+}
+

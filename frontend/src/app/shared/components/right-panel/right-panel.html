@@ -1,0 +1,28 @@
+<section class="right-panel">
+
+  <!-- SHARE SONG -->
+  <div class="card">
+    <h3>🎵 Share your song</h3>
+
+    <input type="text" placeholder="Song name" />
+    <input type="text" placeholder="Send to (user or group)" />
+
+    <button (click)="sendSong()">SEND</button>
+  </div>
+
+  <!-- MUSIC BOX -->
+  <div class="music-box">
+  <h3>🎧 MusicBox</h3>
+
+  <div
+    class="music-item"
+    *ngFor="let song of receivedSongs"
+    (click)="openReceivedSong(song)"
+  >
+    <strong>{{ song.from }}</strong>
+    <div class="song-title">{{ song.title }}</div>
+    <small class="artist">{{ song.artist }}</small>
+  </div>
+</div>
+
+</section>

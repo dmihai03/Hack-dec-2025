@@ -1,0 +1,23 @@
+.music-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #00ffff55;
+  border-radius: 6px;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.music-item:hover {
+  background: rgba(0, 255, 255, 0.08);
+  box-shadow: 0 0 10px #00ffff;
+  transform: translateX(-4px);
+}
+
+.song-title {
+  color: #00ffff;
+}
+
+.artist {
+  color: #ccc;
+}
