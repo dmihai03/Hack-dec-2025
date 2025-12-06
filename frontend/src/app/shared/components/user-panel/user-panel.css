@@ -79,3 +79,124 @@
 .groups li {
   font-size: 9px;
 }
+
+.group-item {
+  cursor: pointer;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.group-item:hover {
+  background: rgba(255, 79, 216, 0.2);
+  box-shadow: 0 0 8px #ff4fd8;
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #ff4fd8;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 320px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 30px rgba(255, 79, 216, 0.5);
+  font-family: 'Press Start 2P', monospace;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #ff4fd8;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.close-btn:hover {
+  color: #fff;
+  text-shadow: 0 0 10px #ff4fd8;
+}
+
+.modal-title {
+  font-size: 14px;
+  color: #00fff7;
+  text-shadow: 0 0 10px #00fff7;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-loading {
+  text-align: center;
+  color: #ff4fd8;
+  font-size: 10px;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section h3 {
+  font-size: 10px;
+  color: #ff4fd8;
+  margin-bottom: 12px;
+  text-shadow: 0 0 6px #ff4fd8;
+}
+
+.modal-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-section li {
+  font-size: 9px;
+  padding: 8px;
+  margin-bottom: 6px;
+  background: rgba(0, 255, 247, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid #00fff7;
+}
+
+.modal-section p {
+  font-size: 9px;
+  color: #888;
+}
+
+.member-name {
+  color: #00fff7;
+  display: block;
+}
+
+.member-username {
+  color: #888;
+  font-size: 8px;
+}
+
+.song-title {
+  color: #ffd700;
+}
+
+.song-artist {
+  color: #ccc;
+}

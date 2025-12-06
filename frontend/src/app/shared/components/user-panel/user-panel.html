@@ -48,7 +48,46 @@
   </button>
 
   <ul *ngIf="showGroups && groups.length > 0" class="groups">
-    <li *ngFor="let group of groups">👥 {{ group.name }}</li>
+    <li *ngFor="let group of groups" (click)="openGroupPopup(group)" class="group-item">
+      👥 {{ group.name }}
+    </li>
   </ul>
   <p *ngIf="showGroups && groups.length === 0">No groups yet.</p>
+</div>
+
+<!-- GROUP POPUP MODAL -->
+<div class="modal-overlay" *ngIf="selectedGroup" (click)="closeGroupPopup()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeGroupPopup()">✕</button>
+    
+    <h2 class="modal-title">👥 {{ selectedGroup.name }}</h2>
+
+    <div *ngIf="isLoadingGroup" class="modal-loading">Loading...</div>
+
+    <div *ngIf="!isLoadingGroup">
+      <!-- MEMBERS -->
+      <div class="modal-section">
+        <h3>👤 Members</h3>
+        <ul *ngIf="selectedGroup.members && selectedGroup.members.length > 0">
+          <li *ngFor="let member of selectedGroup.members">
+            <span class="member-name">{{ member.name }}</span>
+            <span class="member-username">@{{ member.username }}</span>
+          </li>
+        </ul>
+        <p *ngIf="!selectedGroup.members || selectedGroup.members.length === 0">No members yet.</p>
+      </div>
+
+      <!-- SHARED SONGS -->
+      <div class="modal-section">
+        <h3>🎵 Shared Songs</h3>
+        <ul *ngIf="selectedGroup.sharedSongs && selectedGroup.sharedSongs.length > 0">
+          <li *ngFor="let song of selectedGroup.sharedSongs">
+            <span class="song-title">{{ song.title }}</span>
+            <span class="song-artist">– {{ song.artist }}</span>
+          </li>
+        </ul>
+        <p *ngIf="!selectedGroup.sharedSongs || selectedGroup.sharedSongs.length === 0">No shared songs yet.</p>
+      </div>
+    </div>
+  </div>
 </div>

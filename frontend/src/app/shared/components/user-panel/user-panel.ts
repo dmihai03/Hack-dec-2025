@@ -5,9 +5,17 @@ import { User } from '../../../core/models/user';
 import { Song } from '../../../core/models/song';
 import { Badge } from '../../../core/models/badge';
 
+interface GroupMember {
+  id: number;
+  name: string;
+  username: string;
+}
+
 interface Group {
   id: number;
   name: string;
+  members?: GroupMember[];
+  sharedSongs?: Song[];
 }
 
 @Component({
@@ -33,6 +41,10 @@ export class UserPanelComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   showGroups = false;
+
+  // Popup state
+  selectedGroup: Group | null = null;
+  isLoadingGroup = false;
 
   ngOnInit() {
     this.loadUserData();
@@ -90,5 +102,28 @@ export class UserPanelComponent implements OnInit {
 
   toggleGroups() {
     this.showGroups = !this.showGroups;
+  }
+
+  openGroupPopup(group: Group) {
+    this.isLoadingGroup = true;
+    this.selectedGroup = group;
+
+    // Fetch full group details with members and shared songs
+    this.http.get<Group>(`${this.apiUrl}/groups/${group.id}`).subscribe({
+      next: (fullGroup) => {
+        this.selectedGroup = fullGroup;
+        this.isLoadingGroup = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load group details', err);
+        this.isLoadingGroup = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  closeGroupPopup() {
+    this.selectedGroup = null;
   }
 }

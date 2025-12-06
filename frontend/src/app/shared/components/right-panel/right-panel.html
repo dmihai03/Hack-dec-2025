@@ -4,10 +4,30 @@
   <div class="card">
     <h3>🎵 Share your song</h3>
 
-    <input type="text" placeholder="Song name" />
-    <input type="text" placeholder="Send to (user or group)" />
+    <input 
+      type="text" 
+      placeholder="Song name" 
+      [(ngModel)]="songName"
+      class="song-input"
+    />
+    
+    <select 
+      [(ngModel)]="selectedGroupId" 
+      class="group-select"
+    >
+      <option [ngValue]="null" disabled>Select a group</option>
+      <option *ngFor="let group of groups" [ngValue]="group.id">
+        👥 {{ group.name }}
+      </option>
+    </select>
 
-    <button (click)="sendSong()">SEND</button>
+    <button (click)="sendSong()" class="send-btn" [disabled]="isSending">
+      {{ isSending ? 'SENDING...' : 'SEND' }}
+    </button>
+
+    <div *ngIf="statusMessage" class="status-message" [class.error]="isError" [class.success]="!isError">
+      {{ statusMessage }}
+    </div>
   </div>
 
   <!-- MUSIC BOX -->

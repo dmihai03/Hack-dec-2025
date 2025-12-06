@@ -3,6 +3,8 @@ package com.example.Hack2025.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,7 @@ public class Group {
     private String name;
 
     @ManyToMany(mappedBy = "groups")
+    @JsonIgnoreProperties("groups")
     private List<User> members;
 
     @ManyToMany
