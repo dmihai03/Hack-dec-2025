@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private UserRepository userRepo;
@@ -70,5 +72,32 @@ public class UserController {
         userRepo.removeSongFromUser(userID, songID);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{userID}/songs")
+    public ResponseEntity<?> getUserSongs(@PathVariable Integer userID) {
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userRepo.getUsersSongs(userID));
+    }
+
+    @GetMapping("/{userID}/groups")
+    public ResponseEntity<?> getUserGroups(@PathVariable Integer userID) {
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userRepo.getUserGroups(userID));
+    }
+
+    @GetMapping("/{userID}/awards")
+    public ResponseEntity<?> getUserAwards(@PathVariable Integer userID) {
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userRepo.getUserAwards(userID));
     }
 }

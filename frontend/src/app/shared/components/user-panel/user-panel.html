@@ -1,44 +1,53 @@
 <div class="user-panel">
+  <!-- LOADING -->
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+
+  <!-- ERROR -->
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
   <!-- USER -->
-  <div class="user-header">
+  <div class="user-header" *ngIf="user">
     <span class="username">@{{ user.username }}</span>
-    <span class="rating">⭐ rating zilnic: {{ user.rating }}</span>
+    <span class="rating">⭐ rating: {{ user.ratingNumber }}</span>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" *ngIf="user"></div>
 
   <!-- RECENT SONGS -->
-  <div class="section">
+  <div class="section" *ngIf="!isLoading">
     <h3>🎵 Piese recente</h3>
-    <ul>
+    <ul *ngIf="recentSongs.length > 0">
       <li *ngFor="let song of recentSongs">
         {{ song.title }} – {{ song.artist }}
-        <span class="likes">({{ song.likes }} likes)</span>
+        <span class="category">({{ song.category }})</span>
       </li>
     </ul>
+    <p *ngIf="recentSongs.length === 0">No songs yet.</p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" *ngIf="!isLoading"></div>
 
   <!-- BADGES -->
-  <div class="section">
+  <div class="section" *ngIf="!isLoading">
     <h3>🏆 Badges</h3>
-    <ul>
+    <ul *ngIf="badges.length > 0">
       <li *ngFor="let badge of badges">
         <strong>{{ badge.name }}</strong>
-        <span class="badge-desc">– {{ badge.description }}</span>
+        <span class="badge-desc"> – {{ badge.description }}</span>
       </li>
     </ul>
+    <p *ngIf="badges.length === 0">No badges yet.</p>
   </div>
 
-  <div class="divider"></div>
+  <div class="divider" *ngIf="!isLoading"></div>
 
   <!-- GROUPS -->
-  <button class="retro-btn" (click)="toggleGroups()">
+  <button class="retro-btn" (click)="toggleGroups()" *ngIf="!isLoading">
     {{ showGroups ? 'Hide groups' : 'Show groups' }}
   </button>
 
-  <ul *ngIf="showGroups" class="groups">
+  <ul *ngIf="showGroups && groups.length > 0" class="groups">
     <li *ngFor="let group of groups">👥 {{ group.name }}</li>
   </ul>
+  <p *ngIf="showGroups && groups.length === 0">No groups yet.</p>
 </div>
