@@ -4,13 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Hack2025.Entities.User;
-import com.example.Hack2025.Repositories.UserRepository;
-
-
-@Controller
+@RestController
 public class HomeController {
     @GetMapping("/")
     @ResponseBody
@@ -20,9 +18,7 @@ public class HomeController {
 
     @PostMapping("/user/profile")
     public String getUserProfile(@RequestBody String userID) {
-        User user = new UserRepository().getUserById(Long.parseLong(userID)).orElse(null);
-
-        return user.toString();
+        
     }
     
 }
