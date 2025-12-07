@@ -150,4 +150,15 @@ export class GameModeComponent implements OnInit {
     this.gameState.addCoins(-poster.price);
     this.gameState.addPoster(poster);
   }
+
+  debugNextPoster() {
+  console.log('➡ CLICKED');
+  console.log('INDEX BEFORE:', this.currentPosterIndex);
+
+  this.currentPosterIndex++;
+
+  console.log('INDEX AFTER:', this.currentPosterIndex);
+}
+
+
 }
