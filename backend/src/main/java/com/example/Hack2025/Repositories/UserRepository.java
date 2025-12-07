@@ -164,4 +164,67 @@ public class UserRepository {
                 .setMaxResults(limit)
                 .getResultList();
     }
+
+    public Integer getUserCoins(Integer userId) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            return user.getCoins() != null ? user.getCoins() : 0;
+        }
+        return 0;
+    }
+
+    public void addCoinsToUser(Integer userId, Integer amount) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            Integer currentCoins = user.getCoins() != null ? user.getCoins() : 0;
+            user.setCoins(currentCoins + amount);
+            entityManager.merge(user);
+        }
+    }
+
+    public void setUserCoins(Integer userId, Integer coins) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            user.setCoins(coins);
+            entityManager.merge(user);
+        }
+    }
+
+    public String getOwnedAvatars(Integer userId) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            return user.getOwnedAvatars();
+        }
+        return "default";
+    }
+
+    public boolean purchaseAvatar(Integer userId, String avatarId, Integer cost) {
+        User user = entityManager.find(User.class, userId);
+        if (user == null) {
+            return false;
+        }
+        
+        Integer currentCoins = user.getCoins() != null ? user.getCoins() : 0;
+        if (currentCoins < cost) {
+            return false; // Not enough coins
+        }
+        
+        String owned = user.getOwnedAvatars();
+        if (owned != null && owned.contains(avatarId)) {
+            return true; // Already owned
+        }
+        
+        // Deduct coins
+        user.setCoins(currentCoins - cost);
+        
+        // Add avatar to owned list
+        if (owned == null || owned.isEmpty()) {
+            user.setOwnedAvatars(avatarId);
+        } else {
+            user.setOwnedAvatars(owned + "," + avatarId);
+        }
+        
+        entityManager.merge(user);
+        return true;
+    }
 }

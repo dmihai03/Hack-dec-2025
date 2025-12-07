@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameStateService, Avatar } from '../../core/services/game-state.service';
 import { Router } from '@angular/router';
@@ -14,54 +14,86 @@ export class GameModeComponent implements OnInit {
 
   showAvatarModal = false;
   avatars: Avatar[] = [];
-  coins = 0;
   selectedAvatar: Avatar | null = null;
   isRetroRoomOpen = false;
   currentPosterIndex = 0;
-
+  isLoading = true;
 
   constructor(
-  public gameState: GameStateService,
-  private router: Router
-) {}
-
+    public gameState: GameStateService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.avatars = this.gameState.avatars;
-    this.coins = this.gameState.coins;
     this.selectedAvatar = this.gameState.selectedAvatar;
 
-    // dacă nu are niciun avatar selectat, forțează popup-ul
-    if (!this.selectedAvatar) {
-      this.showAvatarModal = true;
-    }
+    // Load user data (coins + owned avatars) from backend
+    this.gameState.loadUserData().then(() => {
+      this.isLoading = false;
+      // If no avatar selected, show modal
+      if (!this.selectedAvatar) {
+        this.showAvatarModal = true;
+      }
+      this.cdr.detectChanges();
+    }).catch(() => {
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    });
   }
 
-  canUseAvatar(avatar: Avatar): boolean {
-    return this.coins >= avatar.requiredCoins;
+  isAvatarOwned(avatar: Avatar): boolean {
+    return this.gameState.isAvatarOwned(avatar.id);
   }
 
-  selectAvatar(avatar: Avatar) {
-    // pentru default nu verificăm coins
-    if (avatar.requiredCoins > 0 && this.coins < avatar.requiredCoins) {
-      // eventual pui un mesaj de eroare
-      alert('You need more coins for this artist!');
+  canAffordAvatar(avatar: Avatar): boolean {
+    return this.gameState.coins >= avatar.requiredCoins;
+  }
+
+  async selectAvatar(avatar: Avatar) {
+    // If already owned, just select it
+    if (this.gameState.isAvatarOwned(avatar.id)) {
+      this.gameState.setSelectedAvatar(avatar);
+      this.selectedAvatar = avatar;
+      this.showAvatarModal = false;
+      this.cdr.detectChanges();
       return;
+    }
+
+    // If not owned and costs coins, try to purchase
+    if (avatar.requiredCoins > 0) {
+      if (!this.canAffordAvatar(avatar)) {
+        alert('You need more coins for this artist!');
+        return;
+      }
+
+      const confirmed = confirm(`Buy ${avatar.name} for 🪙 ${avatar.requiredCoins} coins?`);
+      if (!confirmed) return;
+
+      const success = await this.gameState.purchaseAvatar(avatar);
+      if (!success) {
+        alert('Purchase failed. Please try again.');
+        return;
+      }
+      
+      // Force UI update after purchase
+      this.cdr.detectChanges();
     }
 
     this.gameState.setSelectedAvatar(avatar);
     this.selectedAvatar = avatar;
     this.showAvatarModal = false;
+    this.cdr.detectChanges();
   }
 
   openAvatarModal() {
     this.showAvatarModal = true;
   }
 
-  // pentru mai târziu – aici o să ducem userul în arena
   startSinglePlayer() {
     console.log('Start single player with avatar:', this.selectedAvatar);
-    this.gameState.setGameMode('single'); // dacă ai metoda
+    this.gameState.setGameMode('single');
     this.router.navigate(['/arena']);
   }
 
@@ -76,23 +108,23 @@ export class GameModeComponent implements OnInit {
   }
 
   openRetroRoom() {
-  this.isRetroRoomOpen = true;
-  this.currentPosterIndex = 0;
-}
-
-closeRetroRoom() {
-  this.isRetroRoomOpen = false;
-}
-
-nextPoster() {
-  if (this.currentPosterIndex < this.gameState.posters.length - 1) {
-    this.currentPosterIndex++;
+    this.isRetroRoomOpen = true;
+    this.currentPosterIndex = 0;
   }
-}
 
-prevPoster() {
-  if (this.currentPosterIndex > 0) {
-    this.currentPosterIndex--;
+  closeRetroRoom() {
+    this.isRetroRoomOpen = false;
   }
-}
+
+  nextPoster() {
+    if (this.currentPosterIndex < this.gameState.posters.length - 1) {
+      this.currentPosterIndex++;
+    }
+  }
+
+  prevPoster() {
+    if (this.currentPosterIndex > 0) {
+      this.currentPosterIndex--;
+    }
+  }
 }

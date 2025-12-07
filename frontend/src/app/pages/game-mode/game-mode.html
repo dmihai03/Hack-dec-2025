@@ -1,5 +1,10 @@
 <div class="game-page">
 
+  <!-- LOADING -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-spinner">Loading...</div>
+  </div>
+
   <!-- TITLU -->
   <header class="game-header">
     <span class="icon">🎮</span>
@@ -29,7 +34,7 @@
 
     <div class="coins-info">
       <span class="coins-label">Coins</span>
-      <span class="coins-value">🪙 {{ coins }}</span>
+      <span class="coins-value">🪙 {{ gameState.coins }}</span>
     </div>
   </section>
 
@@ -60,16 +65,21 @@
         <button
           *ngFor="let avatar of avatars"
           class="avatar-card"
-          [class.locked]="!canUseAvatar(avatar)"
+          [class.owned]="gameState.isAvatarOwned(avatar.id)"
+          [class.locked]="!gameState.isAvatarOwned(avatar.id) && !canAffordAvatar(avatar)"
+          [class.purchasable]="!gameState.isAvatarOwned(avatar.id) && canAffordAvatar(avatar)"
           (click)="selectAvatar(avatar)"
         >
           <div class="avatar-img">
             <img [src]="avatar.imageUrl" [alt]="avatar.name">
+            <div class="owned-badge" *ngIf="gameState.isAvatarOwned(avatar.id)">✓</div>
+            <div class="lock-icon" *ngIf="!gameState.isAvatarOwned(avatar.id) && !canAffordAvatar(avatar)">🔒</div>
           </div>
           <div class="avatar-name">{{ avatar.name }}</div>
           <div class="avatar-cost">
-            <span *ngIf="avatar.requiredCoins === 0">Default</span>
-            <span *ngIf="avatar.requiredCoins > 0">
+            <span *ngIf="avatar.requiredCoins === 0">Free</span>
+            <span *ngIf="avatar.requiredCoins > 0 && gameState.isAvatarOwned(avatar.id)" class="owned-text">Owned</span>
+            <span *ngIf="avatar.requiredCoins > 0 && !gameState.isAvatarOwned(avatar.id)">
               🪙 {{ avatar.requiredCoins }} coins
             </span>
           </div>
@@ -77,7 +87,7 @@
       </div>
 
       <p class="coins-info-modal">
-        Your coins: <strong>🪙 {{ coins }}</strong>
+        Your coins: <strong>🪙 {{ gameState.coins }}</strong>
       </p>
     </div>
   </div>

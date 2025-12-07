@@ -36,6 +36,11 @@ public class User {
 
     private Integer ratingNumber;
 
+    private Integer coins;
+
+    @Column(columnDefinition = "TEXT")
+    private String ownedAvatars;
+
     @ManyToMany
     @JoinTable(
         name = "users_awards", // tabel intermediar
@@ -72,6 +77,8 @@ public class User {
         this.awards = new ArrayList<>();
         this.groups = new ArrayList<>();
         this.songs = new ArrayList<>();
+        this.coins = 0;
+        this.ownedAvatars = "default";
     }
     
     public Integer getId() {
@@ -126,6 +133,10 @@ public class User {
         return awards;
     }
 
+    public Integer getCoins() {
+        return coins;
+    }
+
     public void setAwards (List<Award> awards) {
         this.awards = awards;
     }
@@ -144,5 +155,17 @@ public class User {
 
     public void setSongs (List<Song> songs) {
         this.songs = songs;
+    }
+
+    public void setCoins(Integer coins) {
+        this.coins = coins;
+    }
+
+    public String getOwnedAvatars() {
+        return ownedAvatars != null ? ownedAvatars : "default";
+    }
+
+    public void setOwnedAvatars(String ownedAvatars) {
+        this.ownedAvatars = ownedAvatars;
     }
 }

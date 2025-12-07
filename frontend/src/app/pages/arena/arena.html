@@ -1,9 +1,15 @@
 <section class="arena">
 
   <header class="arena-header">
-    <div>
-      <small>Avatar</small>
-      <strong>{{ gameState.selectedAvatar?.name || 'Unknown Artist' }}</strong>
+    <div class="avatar-display">
+      <img *ngIf="gameState.selectedAvatar" 
+           [src]="gameState.selectedAvatar.imageUrl" 
+           [alt]="gameState.selectedAvatar.name"
+           class="avatar-img">
+      <div class="avatar-text">
+        <small>Avatar</small>
+        <strong>{{ gameState.selectedAvatar?.name || 'Unknown Artist' }}</strong>
+      </div>
     </div>
 
     <div>

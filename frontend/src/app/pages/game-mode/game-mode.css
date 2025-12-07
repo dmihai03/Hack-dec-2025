@@ -4,6 +4,28 @@
   font-family: 'Press Start 2P', system-ui, sans-serif;
 }
 
+/* LOADING OVERLAY */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.loading-spinner {
+  font-size: 18px;
+  color: #ff3ff3;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 .game-header {
   display: flex;
   align-items: center;
@@ -158,9 +180,25 @@
 
 .avatar-card.locked {
   opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.avatar-card.owned {
+  border-color: #00ff00;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+}
+
+.avatar-card.purchasable {
+  border-color: #ffd700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.avatar-card.purchasable:hover {
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
 }
 
 .avatar-img {
+  position: relative;
   width: 80px;
   height: 80px;
   margin: 0 auto 8px;
@@ -170,6 +208,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.owned-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #00ff00;
+  color: #000;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.owned-text {
+  color: #00ff00;
 }
 
 .avatar-img img {

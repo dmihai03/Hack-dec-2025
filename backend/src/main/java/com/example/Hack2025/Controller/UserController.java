@@ -112,4 +112,72 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{userID}/coins")
+    public ResponseEntity<?> getUserCoins(@PathVariable Integer userID) {
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(Map.of("coins", userRepo.getUserCoins(userID)));
+    }
+
+    @PostMapping("/{userID}/coins/add")
+    public ResponseEntity<?> addCoinsToUser(
+        @PathVariable Integer userID,
+        @RequestBody Map<String, Integer> body) {
+
+        Integer amount = body == null ? null : body.get("amount");
+
+        if (amount == null) {
+            return ResponseEntity.badRequest().body("Missing 'amount' in request body");
+        }
+
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userRepo.addCoinsToUser(userID, amount);
+        return ResponseEntity.ok(Map.of("coins", userRepo.getUserCoins(userID)));
+    }
+
+    @GetMapping("/{userID}/avatars")
+    public ResponseEntity<?> getOwnedAvatars(@PathVariable Integer userID) {
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        String owned = userRepo.getOwnedAvatars(userID);
+        return ResponseEntity.ok(Map.of("ownedAvatars", owned != null ? owned : "default"));
+    }
+
+    @PostMapping("/{userID}/avatars/purchase")
+    public ResponseEntity<?> purchaseAvatar(
+        @PathVariable Integer userID,
+        @RequestBody Map<String, Object> body) {
+
+        String avatarId = body == null ? null : (String) body.get("avatarId");
+        Integer cost = body == null ? null : (Integer) body.get("cost");
+
+        if (avatarId == null || cost == null) {
+            return ResponseEntity.badRequest().body("Missing 'avatarId' or 'cost' in request body");
+        }
+
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boolean success = userRepo.purchaseAvatar(userID, avatarId, cost);
+        if (!success) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Not enough coins"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+            "success", true,
+            "coins", userRepo.getUserCoins(userID),
+            "ownedAvatars", userRepo.getOwnedAvatars(userID)
+        ));
+    }
 }
