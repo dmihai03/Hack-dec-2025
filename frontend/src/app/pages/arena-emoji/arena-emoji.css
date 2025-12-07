@@ -5,28 +5,123 @@
   min-height: 65vh;
 }
 
+.loading {
+  font-size: 18px;
+  color: #00ffff;
+  text-align: center;
+}
+
 .game-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-
   padding: 32px;
   border-radius: 20px;
   border: 2px solid #00ffff;
   background: rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+}
+
+.emojis {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 12px;
 }
 
 .emojis span {
-  font-size: 36px;
-  margin: 0 6px;
+  font-size: 48px;
 }
 
 .input-row {
   display: flex;
   gap: 12px;
+  width: 100%;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ff4fd8;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  outline: none;
+}
+
+.input-row input:focus {
+  border-color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.input-row input:disabled {
+  opacity: 0.6;
+}
+
+.submit-btn {
+  padding: 12px 24px;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #00ffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #00fff7;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.next-btn, .back-btn {
+  padding: 12px 24px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.next-btn {
+  background: #ff4fd8;
+  color: #fff;
+}
+
+.next-btn:hover {
+  box-shadow: 0 0 15px #ff4fd8;
+}
+
+.back-btn {
+  background: #ffa500;
+  color: #1a1a2e;
+}
+
+.back-btn:hover {
+  background: #ffb733;
+  box-shadow: 0 0 15px #ffa500;
 }
 
 .feedback {
-  font-size: 18px;
+  font-size: 16px;
+  margin-top: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
