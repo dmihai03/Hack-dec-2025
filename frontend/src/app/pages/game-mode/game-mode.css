@@ -192,3 +192,76 @@
   font-size: 10px;
   text-align: right;
 }
+
+.retro-room-button {
+  cursor: pointer;
+  align-self: flex-end;
+
+  padding: 8px 14px;
+  border: 2px solid #00ffff;
+  border-radius: 12px;
+  color: #00ffff;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.retro-room-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.retro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.retro-popup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  padding: 30px;
+  border-radius: 20px;
+  border: 3px solid #00ffff;
+  background: #12001f;
+}
+
+.poster-preview {
+  width: 220px;
+  border-radius: 12px;
+}
+
+.nav {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #00ffff;
+  cursor: pointer;
+}
+
+.nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #00ffff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.empty-text {
+  color: #00ffff;
+}
+

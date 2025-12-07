@@ -16,9 +16,12 @@ export class GameModeComponent implements OnInit {
   avatars: Avatar[] = [];
   coins = 0;
   selectedAvatar: Avatar | null = null;
+  isRetroRoomOpen = false;
+  currentPosterIndex = 0;
+
 
   constructor(
-  private gameState: GameStateService,
+  public gameState: GameStateService,
   private router: Router
 ) {}
 
@@ -67,4 +70,29 @@ export class GameModeComponent implements OnInit {
     this.gameState.setGameMode('multi');
     this.router.navigate(['/arena']);
   }
+
+  goToRetroRoom() {
+    this.router.navigate(['/retro-room']);
+  }
+
+  openRetroRoom() {
+  this.isRetroRoomOpen = true;
+  this.currentPosterIndex = 0;
+}
+
+closeRetroRoom() {
+  this.isRetroRoomOpen = false;
+}
+
+nextPoster() {
+  if (this.currentPosterIndex < this.gameState.posters.length - 1) {
+    this.currentPosterIndex++;
+  }
+}
+
+prevPoster() {
+  if (this.currentPosterIndex > 0) {
+    this.currentPosterIndex--;
+  }
+}
 }

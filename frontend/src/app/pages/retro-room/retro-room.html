@@ -1,0 +1,27 @@
+<h2>🖼️ Retro Room</h2>
+
+<section class="room">
+  <h3>Your wall</h3>
+
+  <div class="wall">
+    <img
+      *ngFor="let p of gameState.posters"
+      [src]="p.imageUrl"
+      [alt]="p.name"
+    />
+  </div>
+</section>
+
+<section class="market">
+  <h3>Market</h3>
+
+  <div class="market-grid">
+    <div class="poster-card" *ngFor="let p of marketPosters">
+      <img [src]="p.imageUrl" />
+      <p>{{ p.name }}</p>
+      <button (click)="buyPoster(p)">
+        Buy – {{ p.price }} coins
+      </button>
+    </div>
+  </div>
+</section>

@@ -22,6 +22,10 @@
         <div class="hint">(click to change)</div>
       </div>
     </div>
+      <div class="retro-room-button" (click)="openRetroRoom()">
+  🖼️ Retro Room
+    </div>
+
 
     <div class="coins-info">
       <span class="coins-label">Coins</span>
@@ -77,5 +81,39 @@
       </p>
     </div>
   </div>
+  <div class="retro-overlay" *ngIf="isRetroRoomOpen">
+
+  <div class="retro-popup">
+
+    <button class="close-btn" (click)="closeRetroRoom()">✖</button>
+
+    <ng-container *ngIf="gameState.posters.length > 0; else emptyRoom">
+
+      <button class="nav left"
+              (click)="prevPoster()"
+              [disabled]="currentPosterIndex === 0">
+        ⬅
+      </button>
+
+      <img
+        [src]="gameState.posters[currentPosterIndex].imageUrl"
+        class="poster-preview"
+      />
+
+      <button class="nav right"
+              (click)="nextPoster()"
+              [disabled]="currentPosterIndex === gameState.posters.length - 1">
+        ➡
+      </button>
+
+    </ng-container>
+
+    <ng-template #emptyRoom>
+      <p class="empty-text">No posters yet. Win games & buy some! 🎶</p>
+    </ng-template>
+
+  </div>
+</div>
+
 
 </div>

@@ -1,0 +1,23 @@
+.wall {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  min-height: 200px;
+  border: 2px dashed cyan;
+  padding: 16px;
+}
+
+.wall img {
+  width: 120px;
+  border-radius: 8px;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.poster-card {
+  text-align: center;
+}

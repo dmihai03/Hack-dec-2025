@@ -8,6 +8,7 @@ import { ArenaLyricsComponent } from './pages/arena-lyrics/arena-lyrics';
 import { ArenaArtistImageComponent } from './pages/arena-artist-image/arena-artist-image';
 import { LoginComponent } from './pages/login/login';
 import { authGuard } from './core/guards/auth.guard';
+import { RetroRoomComponent } from './pages/retro-room/retro-room';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,7 +19,8 @@ export const routes: Routes = [
   { path: 'arena', component: ArenaComponent, canActivate: [authGuard] },
 
   // Mini-games
-  { path: 'arena/lyrics', component: ArenaLyricsComponent, canActivate: [authGuard] },
-  { path: 'arena/emoji', component: ArenaEmojiComponent, canActivate: [authGuard] },
-  { path: 'arena/artist-image', component: ArenaArtistImageComponent, canActivate: [authGuard] },
+  { path: 'arena/lyrics', component: ArenaLyricsComponent, canActivate: [authGuard]},
+  { path: 'arena/emoji', component: ArenaEmojiComponent, canActivate: [authGuard]},
+  { path: 'arena/artist-image', component: ArenaArtistImageComponent, canActivate: [authGuard]},
+  { path: 'retro-room', component: RetroRoomComponent, canActivate: [authGuard]}
 ];

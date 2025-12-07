@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Poster } from '../models/poster';
 
 export type GameModeType = 'single' | 'multi';
 
@@ -15,8 +16,9 @@ export interface Avatar {
 export class GameStateService {
 
   private _coins = 0;
-
   private _selectedAvatar: Avatar | null = null;
+  private _posters: Poster[] = [];
+  gameMode: GameModeType | null = null;
 
   private _avatars: Avatar[] = [
     {
@@ -58,10 +60,22 @@ export class GameStateService {
   setSelectedAvatar(avatar: Avatar) {
     this._selectedAvatar = avatar;
   }
-  gameMode: GameModeType | null = null;
 
   setGameMode(mode: GameModeType) {
     this.gameMode = mode;
   }
-}
 
+  get posters(): Poster[] {
+    return this._posters;
+  }
+
+  addPoster(poster: Poster) {
+    if (!this.hasPoster(poster.id)) {
+      this._posters.push(poster);
+    }
+  }
+
+  hasPoster(id: string): boolean {
+    return this._posters.some(p => p.id === id);
+  }
+}
