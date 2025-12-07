@@ -293,6 +293,9 @@ export class UserPanelComponent implements OnInit, OnDestroy {
       voterId: this.userId
     }).subscribe({
       next: () => {
+        // Emit star given event to refresh top users in right panel
+        this.eventService.emitStarGiven();
+        
         // Refresh group details to get updated star count
         if (this.selectedGroup) {
           this.http.get<Group>(`${this.apiUrl}/groups/${this.selectedGroup.id}`).subscribe({

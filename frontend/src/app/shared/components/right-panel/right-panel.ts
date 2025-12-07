@@ -1,8 +1,10 @@
-import { Component, OnInit, inject, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
+import { EventService } from '../../../core/services/event.service';
+import { Subscription } from 'rxjs';
 
 interface ReceivedSong {
   from: string;
@@ -29,12 +31,14 @@ interface TopUser {
   templateUrl: './right-panel.html',
   styleUrls: ['./right-panel.css']
 })
-export class RightPanelComponent implements OnInit {
+export class RightPanelComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
   private zone = inject(NgZone);
   private authService = inject(AuthService);
+  private eventService = inject(EventService);
   private apiUrl = '/api';
+  private subscriptions: Subscription[] = [];
 
   // Get user ID from auth service
   get userId(): number | null {
@@ -63,6 +67,17 @@ export class RightPanelComponent implements OnInit {
       this.loadUserGroups();
       this.loadTopUsers();
     }
+
+    // Subscribe to star given events to refresh top users
+    this.subscriptions.push(
+      this.eventService.starGiven$.subscribe(() => {
+        this.loadTopUsers();
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   loadUserGroups() {

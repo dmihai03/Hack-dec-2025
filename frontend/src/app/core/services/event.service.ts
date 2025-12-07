@@ -13,11 +13,19 @@ export class EventService {
   private groupLeftSource = new Subject<void>();
   groupLeft$ = this.groupLeftSource.asObservable();
 
+  // Event emitted when a star is given to a shared song
+  private starGivenSource = new Subject<void>();
+  starGiven$ = this.starGivenSource.asObservable();
+
   emitGroupJoined() {
     this.groupJoinedSource.next();
   }
 
   emitGroupLeft() {
     this.groupLeftSource.next();
+  }
+
+  emitStarGiven() {
+    this.starGivenSource.next();
   }
 }
