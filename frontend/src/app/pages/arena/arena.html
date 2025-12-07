@@ -1,1 +1,41 @@
-<h1 style="color: cyan">ARENA WORKS ✅</h1>
+<section class="arena">
+
+  <header class="arena-header">
+    <div>
+      <small>Avatar</small>
+      <strong>{{ gameState.selectedAvatar?.name || 'Unknown Artist' }}</strong>
+    </div>
+
+    <div>
+      <small>Coins</small>
+      <strong>{{ gameState.coins }}</strong>
+    </div>
+
+    <div>
+      <small>Mode</small>
+      <strong>{{ gameState.gameMode }}</strong>
+    </div>
+  </header>
+
+  <h2 class="title">Choose your challenge</h2>
+
+  <div class="games-grid">
+    <button class="game-card" (click)="startGame('lyrics')">
+      🎤<br />
+      Guess the song<br />
+      <small>from lyrics</small>
+    </button>
+
+    <button class="game-card" (click)="startGame('artist-image')">
+      🧑‍🎤<br />
+      Guess the song<br />
+      <small>artist + image</small>
+    </button>
+
+    <button class="game-card" (click)="startGame('emoji')">
+      😅🎶🔥<br />
+      Guess the song<br />
+      <small>from emojis</small>
+    </button>
+  </div>
+</section>
