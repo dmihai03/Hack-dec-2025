@@ -63,6 +63,31 @@
   color: #00ffff;
 }
 
+.trending-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.trending-filters button {
+  background: transparent;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trending-filters button:hover {
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.trending-filters button.active {
+  background: #00ffff;
+  color: black;
+  box-shadow: 0 0 12px #00ffff;
+}
+
 .trending-list {
   list-style: none;
   padding: 0;

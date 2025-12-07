@@ -53,6 +53,11 @@ public class SongRepository {
         return entityManager.createQuery(query, Song.class).getResultList();
     }
 
+    public List<Song> getTrendingSongs() {
+        String query = "SELECT s FROM Song s ORDER BY s.likes DESC";
+        return entityManager.createQuery(query, Song.class).getResultList();
+    }
+
     public void addSong(Song song) {
         entityManager.persist(song);
     }

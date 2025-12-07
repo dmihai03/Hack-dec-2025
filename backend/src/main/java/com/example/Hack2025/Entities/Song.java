@@ -62,4 +62,12 @@ public class Song {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
 }

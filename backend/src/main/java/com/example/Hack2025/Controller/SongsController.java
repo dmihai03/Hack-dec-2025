@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Hack2025.Repositories.SongRepository;
+import com.example.Hack2025.Entities.Song;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
@@ -27,7 +28,21 @@ public class SongsController {
         return ResponseEntity.ok(songsRepo.getAllSongs());
     }
 
-    @PostMapping("/{filter}")
+    @GetMapping("/trending")
+    public ResponseEntity<?> getTrendingSongs() {
+        return ResponseEntity.ok(songsRepo.getTrendingSongs());
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addSong(@RequestBody Song song) {
+        if (song.getTitle() == null || song.getArtist() == null || song.getCategory() == null) {
+            return ResponseEntity.badRequest().body("Missing required fields: title, artist, category");
+        }
+        songsRepo.addSong(song);
+        return ResponseEntity.ok(song);
+    }
+
+    @PostMapping("/search/{filter}")
     public ResponseEntity<?> getSongsByFilter(
         @PathVariable String filter,
         @RequestBody Map<String, String> body) {

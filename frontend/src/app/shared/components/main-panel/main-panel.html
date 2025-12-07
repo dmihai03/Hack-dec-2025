@@ -53,8 +53,17 @@
   <section class="trending-section">
     <h3>🔥 Trending songs</h3>
 
+    <div class="trending-filters">
+      <button
+        *ngFor="let cat of trendingCategories"
+        [class.active]="selectedTrendingCategory === cat"
+        (click)="setTrendingCategory(cat)">
+        {{ cat }}
+      </button>
+    </div>
+
     <ul class="trending-list">
-      <li *ngFor="let song of trendingSongs">
+      <li *ngFor="let song of filteredTrendingSongs">
         <div class="song-info">
           <span class="title">{{ song.title }}</span>
           <span class="artist"> - {{ song.artist }}</span>
