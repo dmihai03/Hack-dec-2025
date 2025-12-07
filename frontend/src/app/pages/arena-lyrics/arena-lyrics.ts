@@ -45,6 +45,7 @@ export class ArenaLyricsComponent implements OnInit {
   correctAnswer: Song | null = null;
   questionsAnswered = 0;
   maxQuestions = 3;
+  answeredQuestionIds: Set<number> = new Set();
 
   ngOnInit(): void {
     this.loadQuestion();
@@ -52,19 +53,20 @@ export class ArenaLyricsComponent implements OnInit {
 
   loadQuestion() {
     this.isLoading = true;
-    console.log('Loading question from:', `${this.apiUrl}/game/question`);
     this.http.get<GameQuestion | any>(`${this.apiUrl}/game/question`).subscribe({
       next: (data) => {
-        console.log('Received data from backend:', data);
         if (data.error) {
-          // No questions available, seed the database
           console.log('No questions available, seeding...');
           this.seedQuestions();
         } else {
+          // Check if we already answered this question
+          if (this.answeredQuestionIds.has(data.id)) {
+            console.log('Duplicate question, requesting another...');
+            this.loadQuestion(); // Request another question
+            return;
+          }
           this.question = data;
           this.isLoading = false;
-          console.log('Question loaded:', this.question);
-          console.log('isLoading:', this.isLoading);
           this.resetState();
           this.cdr.detectChanges();
         }
@@ -100,6 +102,9 @@ export class ArenaLyricsComponent implements OnInit {
 
   submit() {
     if (!this.selectedSongId || !this.question || this.isAnswered) return;
+
+    // Track this question as answered
+    this.answeredQuestionIds.add(this.question.id);
 
     this.http.post<AnswerResponse>(`${this.apiUrl}/game/answer`, {
       questionId: this.question.id,

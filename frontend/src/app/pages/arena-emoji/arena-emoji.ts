@@ -44,6 +44,7 @@ export class ArenaEmojiComponent implements OnInit {
   correctAnswer: Song | null = null;
   questionsAnswered = 0;
   maxQuestions = 3;
+  answeredQuestionIds: Set<number> = new Set();
 
   ngOnInit(): void {
     this.loadQuestion();
@@ -57,6 +58,12 @@ export class ArenaEmojiComponent implements OnInit {
           console.log('No questions available, seeding...');
           this.seedQuestions();
         } else {
+          // Check if we already answered this question
+          if (this.answeredQuestionIds.has(data.id)) {
+            console.log('Duplicate question, requesting another...');
+            this.loadQuestion(); // Request another question
+            return;
+          }
           this.question = data;
           this.isLoading = false;
           this.resetState();
@@ -88,6 +95,9 @@ export class ArenaEmojiComponent implements OnInit {
 
   submit() {
     if (!this.answer.trim() || !this.question || this.isAnswered) return;
+
+    // Track this question as answered
+    this.answeredQuestionIds.add(this.question.id);
 
     this.http.post<AnswerResponse>(`${this.apiUrl}/emoji-game/answer`, {
       questionId: this.question.id,
