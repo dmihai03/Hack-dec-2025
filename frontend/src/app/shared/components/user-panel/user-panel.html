@@ -7,7 +7,9 @@
 
   <!-- USER -->
   <div class="user-header" *ngIf="user">
-    <span class="username">@{{ user.username }}</span>
+    <div class="user-header-top">
+      <span class="username">@{{ user.username }}</span>
+    </div>
     <span class="display-name">{{ user.name }}</span>
     <span class="rating">⭐ rating: {{ user.ratingNumber }}</span>
   </div>
@@ -43,16 +45,36 @@
   <div class="divider" *ngIf="!isLoading"></div>
 
   <!-- GROUPS -->
-  <button class="retro-btn" (click)="toggleGroups()" *ngIf="!isLoading">
-    {{ showGroups ? 'Hide groups' : 'Show groups' }}
-  </button>
-
-  <ul *ngIf="showGroups && groups.length > 0" class="groups">
-    <li *ngFor="let group of groups" (click)="openGroupPopup(group)" class="group-item">
-      👥 {{ group.name }}
-    </li>
-  </ul>
-  <p *ngIf="showGroups && groups.length === 0">No groups yet.</p>
+  <div class="section" *ngIf="!isLoading">
+    <div class="section-header">
+      <h3>👥 Groups</h3>
+      <button class="add-group-btn" (click)="toggleCreateGroup()">+</button>
+    </div>
+    
+    <!-- Create Group Form -->
+    <div class="create-group-form" *ngIf="showCreateGroup">
+      <input 
+        type="text" 
+        [(ngModel)]="newGroupName" 
+        placeholder="Group name"
+        class="create-group-input"
+        [disabled]="isCreatingGroup">
+      <button 
+        class="create-btn" 
+        (click)="createGroup()"
+        [disabled]="isCreatingGroup || !newGroupName.trim()">
+        {{ isCreatingGroup ? '...' : 'Create' }}
+      </button>
+    </div>
+    <p class="create-status" *ngIf="createGroupStatus" [class.success]="createGroupStatus.startsWith('✓')">{{ createGroupStatus }}</p>
+    
+    <ul *ngIf="groups.length > 0" class="groups">
+      <li *ngFor="let group of groups" (click)="openGroupPopup(group)" class="group-item">
+        👥 {{ group.name }}
+      </li>
+    </ul>
+    <p *ngIf="groups.length === 0">No groups yet.</p>
+  </div>
 
   <div class="divider" *ngIf="!isLoading"></div>
 
@@ -60,6 +82,11 @@
   <button class="retro-btn logout-btn" (click)="logout()" *ngIf="!isLoading">
     🚪 Logout
   </button>
+
+  <!-- NOTIFICATIONS - Fixed bottom left -->
+  <div class="notifications-section" *ngIf="!isLoading">
+    <app-notifications></app-notifications>
+  </div>
 </div>
 
 <!-- GROUP POPUP MODAL -->
@@ -108,6 +135,51 @@
           </li>
         </ul>
         <p *ngIf="!selectedGroup.sharedSongs || selectedGroup.sharedSongs.length === 0">No shared songs yet.</p>
+      </div>
+
+      <!-- INVITE USER -->
+      <div class="modal-section invite-section">
+        <h3>✉️ Invite User</h3>
+        <div class="invite-form">
+          <input 
+            type="text" 
+            [(ngModel)]="inviteUsername" 
+            placeholder="Enter username"
+            class="invite-input"
+            [disabled]="isInviting">
+          <button 
+            class="invite-btn" 
+            (click)="inviteUser()"
+            [disabled]="isInviting || !inviteUsername.trim()">
+            {{ isInviting ? 'Sending...' : 'Send Invite' }}
+          </button>
+        </div>
+        <p class="invite-status" *ngIf="inviteStatus" [class.success]="inviteStatus.startsWith('✓')">
+          {{ inviteStatus }}
+        </p>
+      </div>
+
+      <!-- LEAVE GROUP -->
+      <div class="modal-section leave-section">
+        <button 
+          class="leave-btn" 
+          (click)="leaveGroup()"
+          [disabled]="isLeavingGroup">
+          {{ isLeavingGroup ? 'Leaving...' : '🚪 Leave Group' }}
+        </button>
+        <p class="leave-status" *ngIf="leaveStatus">{{ leaveStatus }}</p>
+      </div>
+
+      <!-- ACTIVITY LOG -->
+      <div class="modal-section activity-section" *ngIf="selectedGroup.activities && selectedGroup.activities.length > 0">
+        <h3>📋 Recent Activity</h3>
+        <ul class="activity-list">
+          <li *ngFor="let activity of selectedGroup.activities" class="activity-item" [ngClass]="activity.type.toLowerCase()">
+            <span class="activity-icon">{{ activity.type === 'MEMBER_JOINED' ? '➡️' : '⬅️' }}</span>
+            <span class="activity-message">{{ activity.message }}</span>
+            <span class="activity-time">{{ formatActivityTime(activity.createdAt) }}</span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

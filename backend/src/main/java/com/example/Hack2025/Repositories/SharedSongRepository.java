@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.Hack2025.Entities.Notification;
 import com.example.Hack2025.Entities.SharedSong;
 import com.example.Hack2025.Entities.SongStar;
 import com.example.Hack2025.Entities.User;
@@ -47,6 +48,12 @@ public class SharedSongRepository {
                 Integer currentRating = sender.getRatingNumber();
                 sender.setRatingNumber(currentRating == null ? 1 : currentRating + 1);
                 entityManager.merge(sender);
+
+                // Create notification for the sender
+                String songTitle = sharedSong.getSong().getTitle();
+                String message = "@" + voter.getUsername() + " gave you a ⭐ for sharing \"" + songTitle + "\"";
+                Notification notification = new Notification(sender, Notification.NotificationType.STAR_RECEIVED, message, voter);
+                entityManager.persist(notification);
             }
         }
     }

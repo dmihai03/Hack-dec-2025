@@ -14,6 +14,7 @@ import com.example.Hack2025.Entities.SharedSong;
 import com.example.Hack2025.Entities.Song;
 import com.example.Hack2025.Entities.User;
 import com.example.Hack2025.Repositories.GroupRepository;
+import com.example.Hack2025.Repositories.NotificationRepository;
 import com.example.Hack2025.Repositories.SharedSongRepository;
 import com.example.Hack2025.Repositories.SongRepository;
 import com.example.Hack2025.Repositories.UserRepository;
@@ -35,6 +36,32 @@ public class GroupsController {
 
     @Autowired
     private SharedSongRepository sharedSongRepo;
+
+    @Autowired
+    private NotificationRepository notificationRepo;
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createGroup(@RequestBody Map<String, Object> request) {
+        String name = (String) request.get("name");
+        Integer creatorId = (Integer) request.get("creatorId");
+
+        if (name == null || name.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Group name is required"));
+        }
+
+        User creator = userRepo.getUserById(creatorId).orElse(null);
+        if (creator == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "User not found"));
+        }
+
+        // Create the group
+        Group group = groupRepo.createGroup(name.trim());
+        
+        // Add creator as first member
+        userRepo.addGroupToUser(creatorId, group.getId());
+
+        return ResponseEntity.ok(Map.of("message", "Group created", "groupId", group.getId(), "groupName", group.getName()));
+    }
 
     @GetMapping("/{groupId}")
     public ResponseEntity<?> getGroupDetails(@PathVariable Integer groupId) {
@@ -79,6 +106,15 @@ public class GroupsController {
         }
 
         songRepo.addSongToGroup(groupId, song.getId(), senderId);
+        
+        // Notify all group members (except the sender) about the shared song
+        if (group.getMembers() != null) {
+            for (User member : group.getMembers()) {
+                if (!member.getId().equals(senderId)) {
+                    notificationRepo.createSongSharedNotification(member, sender, group, song.getTitle());
+                }
+            }
+        }
         
         return ResponseEntity.ok().body("Song shared successfully");
     }
@@ -155,12 +191,12 @@ public class GroupsController {
 
         // Check if user already starred this song
         if (sharedSongRepo.hasUserStarred(sharedSongId, voterId)) {
-            return ResponseEntity.badRequest().body("You have already starred this song");
+            return ResponseEntity.badRequest().body(Map.of("error", "You have already starred this song"));
         }
 
         sharedSongRepo.addStar(sharedSongId, voterId);
 
-        return ResponseEntity.ok().body("Star given successfully");
+        return ResponseEntity.ok().body(Map.of("message", "Star given successfully"));
     }
 
     @GetMapping("/shared-songs/{sharedSongId}/stars")
@@ -177,5 +213,41 @@ public class GroupsController {
             "starCount", starCount,
             "voterIds", voterIds
         ));
+    }
+
+    @PostMapping("/{groupId}/invite")
+    public ResponseEntity<?> inviteUserToGroup(
+        @PathVariable Integer groupId,
+        @RequestBody Map<String, Object> body) {
+        
+        Integer invitedUserId = body == null ? null : (Integer) body.get("invitedUserId");
+        Integer inviterId = body == null ? null : (Integer) body.get("inviterId");
+        
+        if (invitedUserId == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Missing 'invitedUserId' in request body"));
+        }
+        if (inviterId == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Missing 'inviterId' in request body"));
+        }
+
+        Group group = groupRepo.getGroupById(groupId).orElse(null);
+        if (group == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Group not found"));
+        }
+
+        User invitedUser = userRepo.getUserById(invitedUserId).orElse(null);
+        if (invitedUser == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Invited user not found"));
+        }
+
+        User inviter = userRepo.getUserById(inviterId).orElse(null);
+        if (inviter == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Inviter not found"));
+        }
+
+        // Create notification for the invited user
+        notificationRepo.createGroupInviteNotification(invitedUser, inviter, group);
+
+        return ResponseEntity.ok(Map.of("message", "Invite sent successfully"));
     }
 }

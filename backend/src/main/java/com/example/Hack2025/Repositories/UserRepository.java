@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.example.Hack2025.Entities.Group;
+import com.example.Hack2025.Entities.GroupActivity;
 import com.example.Hack2025.Entities.Song;
 import com.example.Hack2025.Entities.User;
 import com.example.Hack2025.Entities.Award;
@@ -75,13 +76,22 @@ public class UserRepository {
 
     public void addGroupToUser(Integer userId, Integer groupId) {
         User user = entityManager.find(User.class, userId);
-        if (user != null) {
+        Group group = entityManager.find(Group.class, groupId);
+        if (user != null && group != null) {
             List<Group> groups = user.getGroups();
             if (groups.stream().anyMatch(g -> g.getId().equals(groupId))) {
                 return; // Group already added
             }
 
-            groups.add(entityManager.find(Group.class, groupId));
+            // Create activity record
+            GroupActivity activity = new GroupActivity();
+            activity.setGroup(group);
+            activity.setUser(user);
+            activity.setType(GroupActivity.ActivityType.MEMBER_JOINED);
+            activity.setMessage("@" + user.getUsername() + " joined the group");
+            entityManager.persist(activity);
+
+            groups.add(group);
             user.setGroups(groups);
             entityManager.merge(user);
         }
@@ -125,7 +135,17 @@ public class UserRepository {
 
     public void removeGroupFromUser(Integer userID, Integer groupID) {
         User user = entityManager.find(User.class, userID);
-        if (user != null) {
+        Group group = entityManager.find(Group.class, groupID);
+        if (user != null && group != null) {
+            // Create activity record
+            GroupActivity activity = new GroupActivity();
+            activity.setGroup(group);
+            activity.setUser(user);
+            activity.setType(GroupActivity.ActivityType.MEMBER_LEFT);
+            activity.setMessage("@" + user.getUsername() + " left the group");
+            entityManager.persist(activity);
+            
+            // Remove user from group
             List<Group> groups = user.getGroups();
             groups.removeIf(g -> g.getId().equals(groupID));
             user.setGroups(groups);

@@ -20,4 +20,10 @@ public class GroupRepository {
         Group group = entityManager.find(Group.class, id);
         return Optional.ofNullable(group);
     }
+
+    public Group createGroup(String name) {
+        Group group = new Group(name);
+        entityManager.persist(group);
+        return group;
+    }
 }

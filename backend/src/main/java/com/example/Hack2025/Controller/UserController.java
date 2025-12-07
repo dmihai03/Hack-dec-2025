@@ -105,4 +105,11 @@ public class UserController {
     public ResponseEntity<?> getTopUsersByRating(@PathVariable Integer limit) {
         return ResponseEntity.ok(userRepo.getTopUsersByRating(limit));
     }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        return userRepo.getUserByUsername(username)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

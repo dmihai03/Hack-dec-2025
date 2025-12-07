@@ -33,6 +33,10 @@ public class Group {
     @JsonIgnoreProperties("group")
     private List<SharedSong> sharedSongs;
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("group")
+    private List<GroupActivity> activities;
+
     public Group() {
     }
 
@@ -40,6 +44,7 @@ public class Group {
         this.name = name;
         this.members = new ArrayList<>();
         this.sharedSongs = new ArrayList<>();
+        this.activities = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -68,5 +73,13 @@ public class Group {
 
     public void setSharedSongs(List<SharedSong> sharedSongs) {
         this.sharedSongs = sharedSongs;
+    }
+
+    public List<GroupActivity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<GroupActivity> activities) {
+        this.activities = activities;
     }
 }
