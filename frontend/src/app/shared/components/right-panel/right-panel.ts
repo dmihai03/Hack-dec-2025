@@ -61,19 +61,7 @@ export class RightPanelComponent implements OnInit {
   ngOnInit() {
     if (this.userId) {
       this.loadUserGroups();
-      this.loadMusicBox();
     }
-  }
-
-  loadMusicBox() {
-    this.http.get<ReceivedSong[]>(`${this.apiUrl}/users/${this.userId}/musicbox`).subscribe({
-      next: (songs) => {
-        this.receivedSongs = songs;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Failed to load music box', err)
-    });
-    this.loadTopUsers();
   }
 
   loadUserGroups() {
