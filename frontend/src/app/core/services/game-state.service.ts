@@ -20,6 +20,18 @@ export class GameStateService {
   private _posters: Poster[] = [];
   gameMode: GameModeType | null = null;
 
+  constructor() {
+    // ✅ Poster default – garantat inițializat
+    this._posters.push({
+      id: 'aerosmith-rock',
+      name: 'Aerosmith – Rock',
+      imageUrl: 'assets/posters/aerosmith-rock.png',
+      price: 0
+    });
+
+    console.log('GameState posters:', this._posters);
+  }
+
   private _avatars: Avatar[] = [
     {
       id: 'default',
@@ -70,7 +82,8 @@ export class GameStateService {
   }
 
   addPoster(poster: Poster) {
-    if (!this.hasPoster(poster.id)) {
+    // mică protecție să nu îl adăugăm de 2 ori
+    if (!this._posters.some(p => p.id === poster.id)) {
       this._posters.push(poster);
     }
   }
@@ -78,4 +91,6 @@ export class GameStateService {
   hasPoster(id: string): boolean {
     return this._posters.some(p => p.id === id);
   }
+  
 }
+

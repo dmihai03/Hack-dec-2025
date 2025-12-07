@@ -95,10 +95,16 @@
         ⬅
       </button>
 
-      <img
-        [src]="gameState.posters[currentPosterIndex].imageUrl"
-        class="poster-preview"
-      />
+      <div class="poster-container">
+  <img
+    [src]="gameState.posters[currentPosterIndex].imageUrl"
+    class="poster-preview"
+  />
+  <p class="poster-title">
+    {{ gameState.posters[currentPosterIndex].name }}
+  </p>
+</div>
+
 
       <button class="nav right"
               (click)="nextPoster()"
