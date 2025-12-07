@@ -1,11 +1,11 @@
-<h2 class="game-title">Guess the song from the lyric</h2>
+<h2 class="game-title">Guess the song from emojis</h2>
 
 <div class="game-center">
 
   <div class="game-content">
 
-    <div class="lyric" *ngIf="question">
-      "{{ question.lyric }}"
+    <div class="emojis" *ngIf="question">
+      <span *ngFor="let e of question.emojis">{{ e }}</span>
     </div>
 
     <div class="input-row">

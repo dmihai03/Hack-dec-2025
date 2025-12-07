@@ -17,10 +17,9 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
-.lyric {
-  font-size: 24px;
-  font-style: italic;
-  text-align: center;
+.emojis span {
+  font-size: 36px;
+  margin: 0 6px;
 }
 
 .input-row {

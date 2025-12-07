@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ArenaGameService } from '../../core/services/arena-game';
 import { GameStateService } from '../../core/services/game-state.service';
 import { ArenaQuestion } from '../../core/models/arena-game';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-arena-lyrics',
+  selector: 'app-arena-emoji',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './arena-lyrics.html',
-  styleUrls: ['./arena-lyrics.css'],
+  templateUrl: './arena-emoji.html',
+  styleUrls: ['./arena-emoji.css'],
 })
-export class ArenaLyricsComponent implements OnInit {
+export class ArenaEmojiComponent implements OnInit {
 
   question!: ArenaQuestion;
   answer = '';
@@ -24,7 +24,7 @@ export class ArenaLyricsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.question = this.arenaGame.getLyricsQuestion();
+    this.question = this.arenaGame.getEmojiQuestion();
   }
 
   submit() {

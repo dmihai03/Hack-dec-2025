@@ -6,13 +6,13 @@ import { GameStateService } from '../../core/services/game-state.service';
 import { ArenaQuestion } from '../../core/models/arena-game';
 
 @Component({
-  selector: 'app-arena-lyrics',
+  selector: 'app-arena-artist-image',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './arena-lyrics.html',
-  styleUrls: ['./arena-lyrics.css'],
+  templateUrl: './arena-artist-image.html',
+  styleUrls: ['./arena-artist-image.css'],
 })
-export class ArenaLyricsComponent implements OnInit {
+export class ArenaArtistImageComponent implements OnInit {
 
   question!: ArenaQuestion;
   answer = '';
@@ -24,7 +24,7 @@ export class ArenaLyricsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.question = this.arenaGame.getLyricsQuestion();
+    this.question = this.arenaGame.getArtistImageQuestion();
   }
 
   submit() {

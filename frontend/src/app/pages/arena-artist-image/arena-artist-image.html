@@ -1,12 +1,16 @@
-<h2 class="game-title">Guess the song from the lyric</h2>
+<h2 class="game-title">Guess the song</h2>
 
 <div class="game-center">
 
-  <div class="game-content">
+  <div class="game-content" *ngIf="question">
 
-    <div class="lyric" *ngIf="question">
-      "{{ question.lyric }}"
-    </div>
+    <p class="artist-name">{{ question.artist }}</p>
+
+    <img
+      [src]="question.imageUrl"
+      class="artist-image"
+      alt="Artist image"
+    />
 
     <div class="input-row">
       <input [(ngModel)]="answer" placeholder="Song title" />
