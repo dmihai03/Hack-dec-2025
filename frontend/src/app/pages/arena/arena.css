@@ -28,6 +28,15 @@
   flex-direction: column;
 }
 
+.arena-header small {
+  font-size: 28px;
+  opacity: 0.8;
+}
+
+.arena-header strong {
+  font-size: 30px;
+}
+
 .title {
   margin-bottom: 16px;
 }

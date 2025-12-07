@@ -72,17 +72,23 @@
         <button
           *ngFor="let avatar of avatars"
           class="avatar-card"
+          [class.owned]="isAvatarOwned(avatar)"
+          [class.purchasable]="!isAvatarOwned(avatar) && canAffordAvatar(avatar)"
+          [class.locked]="!isAvatarOwned(avatar) && !canAffordAvatar(avatar)"
           (click)="selectAvatar(avatar)"
         >
           <div class="avatar-img">
             <img [src]="avatar.imageUrl" [alt]="avatar.name" />
+            <span class="owned-badge" *ngIf="isAvatarOwned(avatar)">✓</span>
+            <span class="lock-icon" *ngIf="!isAvatarOwned(avatar) && !canAffordAvatar(avatar)">🔒</span>
           </div>
 
           <div class="avatar-name">{{ avatar.name }}</div>
 
           <div class="avatar-cost">
-            <span *ngIf="avatar.requiredCoins === 0">Free</span>
-            <span *ngIf="avatar.requiredCoins > 0">
+            <span *ngIf="isAvatarOwned(avatar)" class="owned-text">Owned</span>
+            <span *ngIf="!isAvatarOwned(avatar) && avatar.requiredCoins === 0">Free</span>
+            <span *ngIf="!isAvatarOwned(avatar) && avatar.requiredCoins > 0">
               🪙 {{ avatar.requiredCoins }} coins
             </span>
           </div>
@@ -146,13 +152,6 @@
         </div>
 
         <!-- SAGEATA DREAPTA -->
-        <!-- <button
-          class="nav right"
-          (click)="nextPoster()"
-          [disabled]="currentPosterIndex === posterCatalog.length - 1"
-        >
-          ➡
-        </button> -->
         <button
           class="nav right"
           (click)="nextPoster()"
@@ -160,7 +159,6 @@
         >
           ➡
         </button>
-
 
       </ng-container>
 

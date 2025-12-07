@@ -32,10 +32,8 @@ export class GameModeComponent implements OnInit {
     this.avatars = this.gameState.avatars;
     this.selectedAvatar = this.gameState.selectedAvatar;
 
-    // Load user data (coins + owned avatars) from backend
     this.gameState.loadUserData().then(() => {
       this.isLoading = false;
-      // If no avatar selected, show modal
       if (!this.selectedAvatar) {
         this.showAvatarModal = true;
       }

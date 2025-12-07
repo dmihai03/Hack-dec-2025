@@ -78,8 +78,10 @@ export class RightPanelComponent implements OnInit {
   loadTopUsers() {
     this.http.get<TopUser[]>(`${this.apiUrl}/users/top/3`).subscribe({
       next: (users) => {
-        this.topUsers = users;
-        this.cdr.detectChanges();
+        this.zone.run(() => {
+          this.topUsers = users;
+          this.cdr.detectChanges();
+        });
       },
       error: (err) => console.error('Failed to load top users', err)
     });
