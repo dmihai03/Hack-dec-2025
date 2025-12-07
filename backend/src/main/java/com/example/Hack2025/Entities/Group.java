@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,13 +29,9 @@ public class Group {
     @JsonIgnoreProperties("groups")
     private List<User> members;
 
-    @ManyToMany
-    @JoinTable(
-        name = "groups_shared_songs",
-        joinColumns = @JoinColumn(name = "group_id"),
-        inverseJoinColumns = @JoinColumn(name = "song_id")
-    )
-    private List<Song> sharedSongs;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("group")
+    private List<SharedSong> sharedSongs;
 
     public Group() {
     }
@@ -66,11 +62,11 @@ public class Group {
         this.members = members;
     }
 
-    public List<Song> getSharedSongs() {
+    public List<SharedSong> getSharedSongs() {
         return sharedSongs;
     }
 
-    public void setSharedSongs(List<Song> sharedSongs) {
+    public void setSharedSongs(List<SharedSong> sharedSongs) {
         this.sharedSongs = sharedSongs;
     }
 }

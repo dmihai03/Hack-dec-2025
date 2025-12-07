@@ -13,11 +13,34 @@ interface GroupMember {
   username: string;
 }
 
+interface SharedSongSender {
+  id: number;
+  name: string;
+  username: string;
+}
+
+interface SongStar {
+  id: number;
+  voter: {
+    id: number;
+    name: string;
+    username: string;
+  };
+}
+
+interface SharedSong {
+  id: number;
+  song: Song;
+  sender: SharedSongSender;
+  stars?: SongStar[];
+  starCount?: number;
+}
+
 interface Group {
   id: number;
   name: string;
   members?: GroupMember[];
-  sharedSongs?: Song[];
+  sharedSongs?: SharedSong[];
 }
 
 @Component({
@@ -133,6 +156,41 @@ export class UserPanelComponent implements OnInit {
 
   closeGroupPopup() {
     this.selectedGroup = null;
+  }
+
+  giveStar(sharedSong: SharedSong) {
+    this.http.post(`${this.apiUrl}/groups/shared-songs/${sharedSong.id}/star`, {
+      voterId: this.userId
+    }).subscribe({
+      next: () => {
+        // Refresh group details to get updated star count
+        if (this.selectedGroup) {
+          this.http.get<Group>(`${this.apiUrl}/groups/${this.selectedGroup.id}`).subscribe({
+            next: (fullGroup) => {
+              this.selectedGroup = fullGroup;
+              this.cdr.detectChanges();
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Failed to give star', err);
+        alert(err.error || 'Failed to give star');
+      }
+    });
+  }
+
+  hasUserStarred(sharedSong: SharedSong): boolean {
+    if (!sharedSong.stars) return false;
+    return sharedSong.stars.some(star => star.voter.id === this.userId);
+  }
+
+  canGiveStar(sharedSong: SharedSong): boolean {
+    // Can't star your own song
+    if (sharedSong.sender.id === this.userId) return false;
+    // Can't star if already starred
+    if (this.hasUserStarred(sharedSong)) return false;
+    return true;
   }
 
   logout() {

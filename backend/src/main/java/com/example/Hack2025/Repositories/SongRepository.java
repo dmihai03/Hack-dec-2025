@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.example.Hack2025.Entities.Group;
+import com.example.Hack2025.Entities.SharedSong;
 import com.example.Hack2025.Entities.Song;
+import com.example.Hack2025.Entities.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -75,35 +77,38 @@ public class SongRepository {
         }
     }
 
-    public void addSongToGroup(Integer groupId, Integer songId) {
+    public void addSongToGroup(Integer groupId, Integer songId, Integer senderId) {
         Group group = entityManager.find(Group.class, groupId);
         Song song = entityManager.find(Song.class, songId);
-        if (group != null && song != null) {
-            List<Song> sharedSongs = group.getSharedSongs();
-            if (!sharedSongs.contains(song)) {
-                sharedSongs.add(song);
-                group.setSharedSongs(sharedSongs);
-                entityManager.merge(group);
+        User sender = entityManager.find(User.class, senderId);
+        
+        if (group != null && song != null && sender != null) {
+            // Check if this song was already shared to this group
+            String checkQuery = "SELECT ss FROM SharedSong ss WHERE ss.group.id = :groupId AND ss.song.id = :songId";
+            List<SharedSong> existing = entityManager.createQuery(checkQuery, SharedSong.class)
+                    .setParameter("groupId", groupId)
+                    .setParameter("songId", songId)
+                    .getResultList();
+            
+            if (existing.isEmpty()) {
+                SharedSong sharedSong = new SharedSong(song, group, sender);
+                entityManager.persist(sharedSong);
             }
         }
     }
 
     public void removeSongFromGroup(Integer groupId, Integer songId) {
-        Group group = entityManager.find(Group.class, groupId);
-        Song song = entityManager.find(Song.class, songId);
-        if (group != null && song != null) {
-            List<Song> sharedSongs = group.getSharedSongs();
-            sharedSongs.remove(song);
-            group.setSharedSongs(sharedSongs);
-            entityManager.merge(group);
-        }
+        String query = "DELETE FROM SharedSong ss WHERE ss.group.id = :groupId AND ss.song.id = :songId";
+        entityManager.createQuery(query)
+                .setParameter("groupId", groupId)
+                .setParameter("songId", songId)
+                .executeUpdate();
     }
 
-    public List<Song> getGroupSharedSongs(Integer groupId) {
-        Group group = entityManager.find(Group.class, groupId);
-        if (group != null) {
-            return group.getSharedSongs();
-        }
-        return List.of();
+    public List<SharedSong> getGroupSharedSongs(Integer groupId) {
+        String query = "SELECT ss FROM SharedSong ss WHERE ss.group.id = :groupId";
+        return entityManager.createQuery(query, SharedSong.class)
+                .setParameter("groupId", groupId)
+                .getResultList();
     }
 }

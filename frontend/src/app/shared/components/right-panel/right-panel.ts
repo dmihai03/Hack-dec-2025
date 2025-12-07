@@ -15,6 +15,13 @@ interface Group {
   name: string;
 }
 
+interface TopUser {
+  id: number;
+  name: string;
+  username: string;
+  ratingNumber: number;
+}
+
 @Component({
   selector: 'app-right-panel',
   standalone: true,
@@ -48,6 +55,8 @@ export class RightPanelComponent implements OnInit {
 
   // Music box songs
   receivedSongs: ReceivedSong[] = [];
+  // Top users by rating
+  topUsers: TopUser[] = [];
 
   ngOnInit() {
     if (this.userId) {
@@ -64,6 +73,7 @@ export class RightPanelComponent implements OnInit {
       },
       error: (err) => console.error('Failed to load music box', err)
     });
+    this.loadTopUsers();
   }
 
   loadUserGroups() {
@@ -76,8 +86,14 @@ export class RightPanelComponent implements OnInit {
     });
   }
 
-  openReceivedSong(song: ReceivedSong) {
-    console.log('Clicked song:', song);
+  loadTopUsers() {
+    this.http.get<TopUser[]>(`${this.apiUrl}/users/top/3`).subscribe({
+      next: (users) => {
+        this.topUsers = users;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Failed to load top users', err)
+    });
   }
 
   sendSong() {
@@ -103,9 +119,10 @@ export class RightPanelComponent implements OnInit {
     this.isSending = true;
     this.cdr.detectChanges();
 
-    // Send song to group
+    // Send song to group with sender ID
     this.http.post(`${this.apiUrl}/groups/${this.selectedGroupId}/share-song`, {
-      songTitle: this.songName.trim()
+      songTitle: this.songName.trim(),
+      senderId: this.userId
     }, { responseType: 'text' }).subscribe({
       next: (response) => {
         this.zone.run(() => {

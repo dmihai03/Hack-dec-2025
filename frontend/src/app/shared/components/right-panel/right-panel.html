@@ -30,19 +30,20 @@
     </div>
   </div>
 
-  <!-- MUSIC BOX -->
-  <div class="music-box">
-  <h3>🎧 MusicBox</h3>
+  <!-- TOP USERS LEADERBOARD -->
+  <div class="leaderboard">
+    <h3>🏆 Top Players</h3>
+    
+    <div class="top-user" *ngFor="let user of topUsers; let i = index">
+      <span class="rank">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉' }}</span>
+      <div class="user-info">
+        <span class="user-name">{{ user.name }}</span>
+        <span class="user-username">@{{ user.username }}</span>
+      </div>
+      <span class="user-rating">⭐ {{ user.ratingNumber }}</span>
+    </div>
 
-  <div
-    class="music-item"
-    *ngFor="let song of receivedSongs"
-    (click)="openReceivedSong(song)"
-  >
-    <strong>{{ song.from }}</strong>
-    <div class="song-title">{{ song.title }}</div>
-    <small class="artist">{{ song.artist }}</small>
+    <p *ngIf="topUsers.length === 0" class="no-data">No players yet</p>
   </div>
-</div>
 
 </section>

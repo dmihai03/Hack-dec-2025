@@ -137,4 +137,11 @@ public class UserRepository {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeSongFromUser'");
     }
+
+    public List<User> getTopUsersByRating(int limit) {
+        String query = "SELECT u FROM User u ORDER BY u.ratingNumber DESC";
+        return entityManager.createQuery(query, User.class)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }

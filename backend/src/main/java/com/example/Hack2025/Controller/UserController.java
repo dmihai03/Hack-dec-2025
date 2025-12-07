@@ -100,4 +100,9 @@ public class UserController {
         }
         return ResponseEntity.ok(userRepo.getUserAwards(userID));
     }
+
+    @GetMapping("/top/{limit}")
+    public ResponseEntity<?> getTopUsersByRating(@PathVariable Integer limit) {
+        return ResponseEntity.ok(userRepo.getTopUsersByRating(limit));
+    }
 }

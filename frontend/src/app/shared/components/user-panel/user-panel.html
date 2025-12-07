@@ -88,9 +88,23 @@
       <div class="modal-section">
         <h3>🎵 Shared Songs</h3>
         <ul *ngIf="selectedGroup.sharedSongs && selectedGroup.sharedSongs.length > 0">
-          <li *ngFor="let song of selectedGroup.sharedSongs">
-            <span class="song-title">{{ song.title }}</span>
-            <span class="song-artist">– {{ song.artist }}</span>
+          <li *ngFor="let sharedSong of selectedGroup.sharedSongs">
+            <div class="shared-song-info">
+              <span class="song-title">{{ sharedSong.song.title }}</span>
+              <span class="song-artist">– {{ sharedSong.song.artist }}</span>
+            </div>
+            <div class="song-meta">
+              <span class="song-sender">shared by @{{ sharedSong.sender.username }}</span>
+              <span class="star-count">⭐ {{ sharedSong.starCount || 0 }}</span>
+            </div>
+            <button 
+              class="star-btn" 
+              *ngIf="canGiveStar(sharedSong)"
+              (click)="giveStar(sharedSong)">
+              ⭐ Give Star
+            </button>
+            <span class="already-starred" *ngIf="hasUserStarred(sharedSong)">✓ You starred this</span>
+            <span class="own-song" *ngIf="sharedSong.sender.id === userId">Your share</span>
           </li>
         </ul>
         <p *ngIf="!selectedGroup.sharedSongs || selectedGroup.sharedSongs.length === 0">No shared songs yet.</p>

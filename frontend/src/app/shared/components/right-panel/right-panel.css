@@ -97,39 +97,70 @@
   border: 1px solid #ff4444;
 }
 
-/* Music box styles */
-.music-box {
+/* Leaderboard styles */
+.leaderboard {
   padding: 16px;
+  margin-top: 8px;
 }
 
-.music-box h3 {
+.leaderboard h3 {
   font-family: 'Press Start 2P', monospace;
   font-size: 11px;
-  color: #ff4fd8;
+  color: #ffd700;
   margin-bottom: 16px;
-  text-shadow: 0 0 8px #ff4fd8;
+  text-shadow: 0 0 8px #ffd700;
 }
 
-.music-item {
+.top-user {
+  display: flex;
+  align-items: center;
   padding: 10px;
   margin-bottom: 8px;
-  border: 1px solid #00ffff55;
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid #ffd70055;
   border-radius: 6px;
-  cursor: pointer;
-
   transition: all 0.2s ease;
 }
 
-.music-item:hover {
-  background: rgba(0, 255, 255, 0.08);
-  box-shadow: 0 0 10px #00ffff;
-  transform: translateX(-4px);
+.top-user:hover {
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 10px #ffd70055;
 }
 
-.song-title {
-  color: #00ffff;
+.rank {
+  font-size: 16px;
+  margin-right: 10px;
 }
 
-.artist {
-  color: #ccc;
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #00fff7;
+}
+
+.user-username {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #888;
+}
+
+.user-rating {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #ffd700;
+  text-shadow: 0 0 6px #ffd700;
+}
+
+.no-data {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #666;
+  text-align: center;
 }

@@ -193,6 +193,11 @@
   font-size: 8px;
 }
 
+.shared-song-info {
+  display: block;
+  margin-bottom: 4px;
+}
+
 .song-title {
   color: #ffd700;
 }
@@ -209,4 +214,56 @@
 
 .logout-btn:hover {
   background: #ff6666;
+}
+
+.song-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.song-sender {
+  font-size: 7px;
+  color: #ff4fd8;
+  font-style: italic;
+}
+
+.star-count {
+  font-size: 8px;
+  color: #ffd700;
+}
+
+.star-btn {
+  display: block;
+  margin-top: 6px;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  border: none;
+  border-radius: 4px;
+  color: #1a1a2e;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.star-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.already-starred {
+  display: block;
+  margin-top: 6px;
+  font-size: 7px;
+  color: #00ff00;
+}
+
+.own-song {
+  display: block;
+  margin-top: 6px;
+  font-size: 7px;
+  color: #888;
+  font-style: italic;
 }
