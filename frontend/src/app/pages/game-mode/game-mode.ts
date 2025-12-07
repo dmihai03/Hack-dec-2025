@@ -91,6 +91,10 @@ export class GameModeComponent implements OnInit {
     this.showAvatarModal = true;
   }
 
+  goHome() {
+    this.router.navigate(['/']);
+  }
+
   startSinglePlayer() {
     console.log('Start single player with avatar:', this.selectedAvatar);
     this.gameState.setGameMode('single');

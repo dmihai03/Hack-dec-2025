@@ -29,9 +29,35 @@
 .game-header {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
   font-size: 24px;
   margin-bottom: 24px;
+}
+
+.game-header h1 {
+  text-align: left;
+}
+
+.home-btn {
+  background: transparent;
+  border: 2px solid #ff3ff3;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: #ff3ff3;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 0 10px rgba(255, 63, 243, 0.4);
+  transition: all 0.2s ease;
+}
+
+.home-btn:hover {
+  background: rgba(255, 63, 243, 0.15);
+  box-shadow: 0 0 16px rgba(255, 63, 243, 0.6);
+}
+
+.home-btn:active {
+  transform: scale(0.95);
 }
 
 .game-header .icon {
