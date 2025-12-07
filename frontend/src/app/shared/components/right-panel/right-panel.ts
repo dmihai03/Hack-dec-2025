@@ -61,6 +61,7 @@ export class RightPanelComponent implements OnInit {
   ngOnInit() {
     if (this.userId) {
       this.loadUserGroups();
+      this.loadTopUsers();
     }
   }
 
