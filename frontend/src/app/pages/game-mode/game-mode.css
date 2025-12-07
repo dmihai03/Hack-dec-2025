@@ -401,5 +401,35 @@
   opacity: 0.9;
 }
 
+.poster-container {
+  position: relative;
+}
+
+.poster-preview {
+  width: 220px;
+  border-radius: 12px;
+}
+
+.locked {
+  filter: blur(4px) brightness(0.6);
+}
+
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.price {
+  color: #00ffff;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+
 
 

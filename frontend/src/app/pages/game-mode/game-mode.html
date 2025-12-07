@@ -13,11 +13,15 @@
 
   <!-- INFO SUS: avatar + coins -->
   <section class="game-info">
+
+    <!-- AVATAR -->
     <div class="avatar-info" (click)="openAvatarModal()">
       <div class="avatar-circle">
-        <img *ngIf="selectedAvatar"
-             [src]="selectedAvatar.imageUrl"
-             [alt]="selectedAvatar.name">
+        <img
+          *ngIf="selectedAvatar"
+          [src]="selectedAvatar.imageUrl"
+          [alt]="selectedAvatar.name"
+        />
       </div>
       <div class="avatar-text">
         <div class="label">Current avatar</div>
@@ -27,18 +31,21 @@
         <div class="hint">(click to change)</div>
       </div>
     </div>
-      <div class="retro-room-button" (click)="openRetroRoom()">
-  🖼️ Retro Room
+
+    <!-- RETRO ROOM -->
+    <div class="retro-room-button" (click)="openRetroRoom()">
+      🖼️ Retro Room
     </div>
 
-
+    <!-- COINS -->
     <div class="coins-info">
       <span class="coins-label">Coins</span>
       <span class="coins-value">🪙 {{ gameState.coins }}</span>
     </div>
+
   </section>
 
-  <!-- MODURI DE JOC (apar doar după ce a ales avatar) -->
+  <!-- MODURI DE JOC -->
   <section class="modes-section" *ngIf="selectedAvatar">
     <h2>Choose your mode</h2>
 
@@ -53,7 +60,7 @@
     </div>
   </section>
 
-  <!-- POPUP CHOOSE AVATAR -->
+  <!-- MODAL AVATAR -->
   <div class="modal-backdrop" *ngIf="showAvatarModal">
     <div class="modal">
       <h2>Choose your Avatar</h2>
@@ -65,21 +72,17 @@
         <button
           *ngFor="let avatar of avatars"
           class="avatar-card"
-          [class.owned]="gameState.isAvatarOwned(avatar.id)"
-          [class.locked]="!gameState.isAvatarOwned(avatar.id) && !canAffordAvatar(avatar)"
-          [class.purchasable]="!gameState.isAvatarOwned(avatar.id) && canAffordAvatar(avatar)"
           (click)="selectAvatar(avatar)"
         >
           <div class="avatar-img">
-            <img [src]="avatar.imageUrl" [alt]="avatar.name">
-            <div class="owned-badge" *ngIf="gameState.isAvatarOwned(avatar.id)">✓</div>
-            <div class="lock-icon" *ngIf="!gameState.isAvatarOwned(avatar.id) && !canAffordAvatar(avatar)">🔒</div>
+            <img [src]="avatar.imageUrl" [alt]="avatar.name" />
           </div>
+
           <div class="avatar-name">{{ avatar.name }}</div>
+
           <div class="avatar-cost">
             <span *ngIf="avatar.requiredCoins === 0">Free</span>
-            <span *ngIf="avatar.requiredCoins > 0 && gameState.isAvatarOwned(avatar.id)" class="owned-text">Owned</span>
-            <span *ngIf="avatar.requiredCoins > 0 && !gameState.isAvatarOwned(avatar.id)">
+            <span *ngIf="avatar.requiredCoins > 0">
               🪙 {{ avatar.requiredCoins }} coins
             </span>
           </div>
@@ -91,45 +94,76 @@
       </p>
     </div>
   </div>
+
+  <!-- ===================== -->
+  <!-- RETRO ROOM POPUP -->
+  <!-- ===================== -->
+
   <div class="retro-overlay" *ngIf="isRetroRoomOpen">
 
-  <div class="retro-popup">
+    <div class="retro-popup">
 
-    <button class="close-btn" (click)="closeRetroRoom()">✖</button>
+      <button class="close-btn" (click)="closeRetroRoom()">✖</button>
 
-    <ng-container *ngIf="gameState.posters.length > 0; else emptyRoom">
+      <!-- DACA EXISTA POSTERE IN CATALOG -->
+      <ng-container *ngIf="posterCatalog.length > 0; else emptyRoom">
 
-      <button class="nav left"
-              (click)="prevPoster()"
-              [disabled]="currentPosterIndex === 0">
-        ⬅
-      </button>
+        <!-- SAGEATA STANGA -->
+        <button
+          class="nav left"
+          (click)="prevPoster()"
+          [disabled]="currentPosterIndex === 0"
+        >
+          ⬅
+        </button>
 
-      <div class="poster-container">
-  <img
-    [src]="gameState.posters[currentPosterIndex].imageUrl"
-    class="poster-preview"
-  />
-  <p class="poster-title">
-    {{ gameState.posters[currentPosterIndex].name }}
-  </p>
-</div>
+        <!-- POSTER -->
+        <div class="poster-container">
 
+          <img
+            [src]="currentPoster().imageUrl"
+            class="poster-preview"
+            [class.locked]="!isOwned(currentPoster())"
+          />
 
-      <button class="nav right"
-              (click)="nextPoster()"
-              [disabled]="currentPosterIndex === gameState.posters.length - 1">
-        ➡
-      </button>
+          <!-- LOCK & BUY -->
+          <div
+            class="lock-overlay"
+            *ngIf="!isOwned(currentPoster())"
+          >
+            <p class="price">
+              🪙 {{ currentPoster().price }}
+            </p>
+            <button (click)="buyPoster(currentPoster())">
+              Buy poster
+            </button>
+          </div>
 
-    </ng-container>
+          <p class="poster-title">
+            {{ currentPoster().name }}
+          </p>
 
-    <ng-template #emptyRoom>
-      <p class="empty-text">No posters yet. Win games & buy some! 🎶</p>
-    </ng-template>
+        </div>
 
+        <!-- SAGEATA DREAPTA -->
+        <button
+          class="nav right"
+          (click)="nextPoster()"
+          [disabled]="currentPosterIndex === posterCatalog.length - 1"
+        >
+          ➡
+        </button>
+
+      </ng-container>
+
+      <!-- FARA POSTERE -->
+      <ng-template #emptyRoom>
+        <p class="empty-text">
+          No posters yet. Win games & buy some! 🎶
+        </p>
+      </ng-template>
+
+    </div>
   </div>
-</div>
-
 
 </div>

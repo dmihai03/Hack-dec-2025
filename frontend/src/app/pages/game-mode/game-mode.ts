@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameStateService, Avatar } from '../../core/services/game-state.service';
 import { Router } from '@angular/router';
+import { POSTER_CATALOG } from '../../core/services/poster-catalog';
+import { Poster } from '../../core/models/poster';
 
 @Component({
   selector: 'app-game',
@@ -18,6 +20,7 @@ export class GameModeComponent implements OnInit {
   isRetroRoomOpen = false;
   currentPosterIndex = 0;
   isLoading = true;
+  posterCatalog: Poster[] = POSTER_CATALOG;
 
   constructor(
     public gameState: GameStateService,
@@ -130,5 +133,21 @@ export class GameModeComponent implements OnInit {
     if (this.currentPosterIndex > 0) {
       this.currentPosterIndex--;
     }
+  }
+  currentPoster(): Poster {
+    return this.posterCatalog[this.currentPosterIndex];
+  }
+
+  isOwned(poster: Poster): boolean {
+    return this.gameState.hasPoster(poster.id);
+  }
+  buyPoster(poster: Poster) {
+    if (this.gameState.coins < poster.price) {
+      alert('Not enough coins!');
+      return;
+    }
+
+    this.gameState.addCoins(-poster.price);
+    this.gameState.addPoster(poster);
   }
 }
