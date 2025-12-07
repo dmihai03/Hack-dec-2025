@@ -29,7 +29,7 @@ export class RetroRoomComponent {
 
   constructor(public gameState: GameStateService) {}
 
-  buyPoster(poster: Poster) {
+  async buyPoster(poster: Poster) {
     if (this.gameState.coins < poster.price) {
       alert('Not enough coins');
       return;
@@ -40,7 +40,9 @@ export class RetroRoomComponent {
       return;
     }
 
-    this.gameState.addCoins(-poster.price);
-    this.gameState.addPoster(poster);
+    const success = await this.gameState.purchasePoster(poster);
+    if (!success) {
+      alert('Failed to purchase poster');
+    }
   }
 }

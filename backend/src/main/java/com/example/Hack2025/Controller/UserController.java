@@ -180,4 +180,43 @@ public class UserController {
             "ownedAvatars", userRepo.getOwnedAvatars(userID)
         ));
     }
+
+    @GetMapping("/{userID}/posters")
+    public ResponseEntity<?> getOwnedPosters(@PathVariable Integer userID) {
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        String owned = userRepo.getOwnedPosters(userID);
+        return ResponseEntity.ok(Map.of("ownedPosters", owned != null ? owned : "aerosmith-rock"));
+    }
+
+    @PostMapping("/{userID}/posters/purchase")
+    public ResponseEntity<?> purchasePoster(
+        @PathVariable Integer userID,
+        @RequestBody Map<String, Object> body) {
+
+        String posterId = body == null ? null : (String) body.get("posterId");
+        Integer cost = body == null ? null : (Integer) body.get("cost");
+
+        if (posterId == null || cost == null) {
+            return ResponseEntity.badRequest().body("Missing 'posterId' or 'cost' in request body");
+        }
+
+        User user = userRepo.getUserById(userID).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boolean success = userRepo.purchasePoster(userID, posterId, cost);
+        if (!success) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Not enough coins"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+            "success", true,
+            "coins", userRepo.getUserCoins(userID),
+            "ownedPosters", userRepo.getOwnedPosters(userID)
+        ));
+    }
 }

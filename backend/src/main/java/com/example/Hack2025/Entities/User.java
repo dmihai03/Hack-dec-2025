@@ -41,6 +41,9 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String ownedAvatars;
 
+    @Column(columnDefinition = "TEXT")
+    private String ownedPosters;
+
     @ManyToMany
     @JoinTable(
         name = "users_awards", // tabel intermediar
@@ -79,6 +82,7 @@ public class User {
         this.songs = new ArrayList<>();
         this.coins = 0;
         this.ownedAvatars = "default";
+        this.ownedPosters = "aerosmith-rock";
     }
     
     public Integer getId() {
@@ -167,5 +171,13 @@ public class User {
 
     public void setOwnedAvatars(String ownedAvatars) {
         this.ownedAvatars = ownedAvatars;
+    }
+
+    public String getOwnedPosters() {
+        return ownedPosters != null ? ownedPosters : "aerosmith-rock";
+    }
+
+    public void setOwnedPosters(String ownedPosters) {
+        this.ownedPosters = ownedPosters;
     }
 }

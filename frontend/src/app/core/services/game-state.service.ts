@@ -23,21 +23,14 @@ export class GameStateService {
 
   private _coins = 0;
   private _ownedAvatars: Set<string> = new Set(['default']);
+  private _ownedPosters: Set<string> = new Set(['aerosmith-rock']);
   private _selectedAvatar: Avatar | null = null;
   private _posters: Poster[] = [];
   private _isLoaded = false;
   gameMode: GameModeType | null = null;
 
   constructor() {
-    // ✅ Poster default – garantat inițializat
-    this._posters.push({
-      id: 'aerosmith-rock',
-      name: 'Aerosmith – Rock',
-      imageUrl: 'assets/posters/aerosmith-rock.png',
-      price: 0
-    });
-
-    console.log('GameState posters:', this._posters);
+    console.log('GameState initialized');
   }
 
   private _avatars: Avatar[] = [
@@ -103,6 +96,20 @@ export class GameStateService {
       } catch (avatarErr) {
         console.error('Failed to load avatars, using default:', avatarErr);
         this._ownedAvatars = new Set(['default']);
+      }
+
+      // Load owned posters
+      try {
+        const postersResponse = await firstValueFrom(
+          this.http.get<{ ownedPosters: string }>(`${this.apiUrl}/users/${userId}/posters`)
+        );
+        if (postersResponse.ownedPosters) {
+          const ownedList = postersResponse.ownedPosters.split(',').filter(id => id.trim());
+          this._ownedPosters = new Set(ownedList);
+        }
+      } catch (posterErr) {
+        console.error('Failed to load posters, using default:', posterErr);
+        this._ownedPosters = new Set(['aerosmith-rock']);
       }
 
       this._isLoaded = true;
@@ -186,16 +193,41 @@ export class GameStateService {
     return this._posters;
   }
 
-  addPoster(poster: Poster) {
-    // mică protecție să nu îl adăugăm de 2 ori
-    if (!this._posters.some(p => p.id === poster.id)) {
-      this._posters.push(poster);
-    }
-  }
-
   hasPoster(id: string): boolean {
-    return this._posters.some(p => p.id === id);
+    return this._ownedPosters.has(id);
   }
-  
-}
 
+  async purchasePoster(poster: Poster): Promise<boolean> {
+    const userId = this.authService.userId;
+    if (!userId) return false;
+
+    // Already owned
+    if (this._ownedPosters.has(poster.id)) {
+      return true;
+    }
+
+    // Not enough coins
+    if (this._coins < poster.price) {
+      return false;
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ success: boolean; coins: number; ownedPosters: string }>(
+          `${this.apiUrl}/users/${userId}/posters/purchase`,
+          { posterId: poster.id, cost: poster.price }
+        )
+      );
+
+      if (response.success) {
+        this._coins = response.coins;
+        const ownedList = response.ownedPosters.split(',').filter(id => id.trim());
+        this._ownedPosters = new Set(ownedList);
+        return true;
+      }
+    } catch (err) {
+      console.error('Failed to purchase poster:', err);
+    }
+    return false;
+  }
+}

@@ -124,7 +124,7 @@ export class GameModeComponent implements OnInit {
   }
 
   nextPoster() {
-    if (this.currentPosterIndex < this.gameState.posters.length - 1) {
+    if (this.currentPosterIndex < this.posterCatalog.length - 1) {
       this.currentPosterIndex++;
     }
   }
@@ -141,24 +141,21 @@ export class GameModeComponent implements OnInit {
   isOwned(poster: Poster): boolean {
     return this.gameState.hasPoster(poster.id);
   }
-  buyPoster(poster: Poster) {
+
+  async buyPoster(poster: Poster) {
     if (this.gameState.coins < poster.price) {
       alert('Not enough coins!');
       return;
     }
 
-    this.gameState.addCoins(-poster.price);
-    this.gameState.addPoster(poster);
+    const confirmed = confirm(`Buy "${poster.name}" for 🪙 ${poster.price} coins?`);
+    if (!confirmed) return;
+
+    const success = await this.gameState.purchasePoster(poster);
+    if (success) {
+      this.cdr.detectChanges();
+    } else {
+      alert('Failed to purchase poster');
+    }
   }
-
-  debugNextPoster() {
-  console.log('➡ CLICKED');
-  console.log('INDEX BEFORE:', this.currentPosterIndex);
-
-  this.currentPosterIndex++;
-
-  console.log('INDEX AFTER:', this.currentPosterIndex);
-}
-
-
 }

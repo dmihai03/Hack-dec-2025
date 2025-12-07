@@ -227,4 +227,42 @@ public class UserRepository {
         entityManager.merge(user);
         return true;
     }
+
+    public String getOwnedPosters(Integer userId) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            return user.getOwnedPosters();
+        }
+        return "aerosmith-rock";
+    }
+
+    public boolean purchasePoster(Integer userId, String posterId, Integer cost) {
+        User user = entityManager.find(User.class, userId);
+        if (user == null) {
+            return false;
+        }
+        
+        Integer currentCoins = user.getCoins() != null ? user.getCoins() : 0;
+        if (currentCoins < cost) {
+            return false; // Not enough coins
+        }
+        
+        String owned = user.getOwnedPosters();
+        if (owned != null && owned.contains(posterId)) {
+            return true; // Already owned
+        }
+        
+        // Deduct coins
+        user.setCoins(currentCoins - cost);
+        
+        // Add poster to owned list
+        if (owned == null || owned.isEmpty()) {
+            user.setOwnedPosters(posterId);
+        } else {
+            user.setOwnedPosters(owned + "," + posterId);
+        }
+        
+        entityManager.merge(user);
+        return true;
+    }
 }
