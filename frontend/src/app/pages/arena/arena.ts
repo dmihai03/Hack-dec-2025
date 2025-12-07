@@ -22,4 +22,8 @@ export class ArenaComponent {
     console.log('Start arena game:', type);
     this.router.navigate(['/arena', type]);
   }
+
+  backToDashboard() {
+    this.router.navigate(['/']);
+  }
 }

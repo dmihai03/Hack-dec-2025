@@ -46,3 +46,19 @@
   color: #00ffff;
   cursor: pointer;
 }
+
+.back-btn {
+  margin-top: 24px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background: transparent;
+  border: 2px solid #ffa500;
+  color: #ffa500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 165, 0, 0.2);
+  box-shadow: 0 0 10px #ffa500;
+}

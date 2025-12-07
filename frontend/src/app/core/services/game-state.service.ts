@@ -61,6 +61,14 @@ export class GameStateService {
     }
   ];
 
+  constructor() {
+    // Load coins from localStorage on init
+    const savedCoins = localStorage.getItem('gameCoins');
+    if (savedCoins) {
+      this._coins = parseInt(savedCoins, 10);
+    }
+  }
+
   get coins() {
     return this._coins;
   }

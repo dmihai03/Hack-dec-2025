@@ -5,29 +5,131 @@
   min-height: 65vh;
 }
 
+.loading {
+  font-size: 18px;
+  color: #00ffff;
+  text-align: center;
+}
+
 .game-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-
   padding: 32px;
   border-radius: 20px;
   border: 2px solid #00ffff;
   background: rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  width: 100%;
 }
 
 .lyric {
   font-size: 24px;
   font-style: italic;
   text-align: center;
+  color: #fff;
+  padding: 20px;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 12px;
+  width: 100%;
 }
 
-.input-row {
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.option-btn {
+  padding: 16px 24px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #fff;
+  background: rgba(255, 79, 216, 0.2);
+  border: 2px solid #ff4fd8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(255, 79, 216, 0.4);
+  transform: translateX(5px);
+}
+
+.option-btn.selected {
+  background: rgba(255, 79, 216, 0.6);
+  border-color: #00ffff;
+}
+
+.option-btn.correct {
+  background: rgba(0, 255, 0, 0.3);
+  border-color: #00ff00;
+}
+
+.option-btn.wrong {
+  background: rgba(255, 0, 0, 0.3);
+  border-color: #ff0000;
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+}
+
+.actions {
   display: flex;
   gap: 12px;
+  margin-top: 10px;
+}
+
+.submit-btn, .next-btn, .back-btn {
+  padding: 12px 24px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #1a1a2e;
+  background: #00ffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled), .next-btn:hover, .back-btn:hover {
+  background: #00fff7;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next-btn {
+  background: #ff4fd8;
+  color: #fff;
+}
+
+.next-btn:hover {
+  box-shadow: 0 0 15px #ff4fd8;
+}
+
+.back-btn {
+  background: #ffa500;
+  color: #1a1a2e;
+}
+
+.back-btn:hover {
+  background: #ffb733;
+  box-shadow: 0 0 15px #ffa500;
 }
 
 .feedback {
-  font-size: 18px;
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
 }

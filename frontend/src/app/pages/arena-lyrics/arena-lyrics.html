@@ -1,19 +1,38 @@
-<h2 class="game-title">Guess the song from the lyric</h2>
+<h2 class="game-title">Guess the song from the lyric ({{ questionsAnswered }}/{{ maxQuestions }})</h2>
 
 <div class="game-center">
+  <div class="loading" *ngIf="isLoading">Loading question...</div>
 
-  <div class="game-content">
-
-    <div class="lyric" *ngIf="question">
+  <div class="game-content" *ngIf="!isLoading && question">
+    <div class="lyric">
       "{{ question.lyric }}"
     </div>
 
-    <div class="input-row">
-      <input [(ngModel)]="answer" placeholder="Song title" />
-      <button (click)="submit()">Submit</button>
+    <div class="options">
+      <button 
+        *ngFor="let option of question.options" 
+        class="option-btn"
+        [class.selected]="selectedSongId === option.id"
+        [class.correct]="isAnswered && correctAnswer?.id === option.id"
+        [class.wrong]="isAnswered && selectedSongId === option.id && correctAnswer?.id !== option.id"
+        [disabled]="isAnswered"
+        (click)="selectOption(option.id)">
+        {{ option.title }} - {{ option.artist }}
+      </button>
+    </div>
+
+    <div class="actions">
+      <button class="submit-btn" (click)="submit()" [disabled]="!selectedSongId || isAnswered">
+        Submit Answer
+      </button>
+      <button class="next-btn" *ngIf="isAnswered && !isLastQuestion" (click)="nextQuestion()">
+        Next Question →
+      </button>
+      <button class="back-btn" *ngIf="isAnswered && isLastQuestion" (click)="backToArena()">
+        ← Back to Arena
+      </button>
     </div>
 
     <p class="feedback" *ngIf="feedback">{{ feedback }}</p>
-
   </div>
 </div>
